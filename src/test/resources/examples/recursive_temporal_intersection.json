@@ -1,0 +1,74 @@
+{
+  "nodes": [
+    {
+      "name": "start",
+      "type": "General"
+    },
+    {
+      "name": "start2",
+      "type": "General"
+    },
+    {
+      "name": "a",
+      "type": "General"
+    },
+    {
+      "name": "b",
+      "type": "General"
+    },
+    {
+      "name": "c",
+      "type": "General"
+    },
+    {
+      "name": "c2",
+      "type": "General"
+    },
+    {
+      "name": "end",
+      "type": "General"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "a",
+      "type": "UnionEdge"
+    },
+    {
+      "from": "start2",
+      "to": "c2",
+      "type": "UnionEdge"
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "type": "DiamondMinusEdge"
+    },
+    {
+      "from": "b",
+      "to": "c",
+      "type": "IntersectionEdge"
+    },
+    {
+      "from": "c",
+      "to": "a",
+      "type": "UnionEdge"
+    },
+    {
+      "from": "c",
+      "to": "c2",
+      "type": "UnionEdge"
+    },
+    {
+      "from": "c2",
+      "to": "c",
+      "type": "IntersectionEdge"
+    },
+    {
+      "from": "b",
+      "to": "end",
+      "type": "LinearEdge"
+    }
+  ]
+}

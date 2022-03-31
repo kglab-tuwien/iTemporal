@@ -1,0 +1,17 @@
+@input("own").
+@bind("own", "csv useHeaders=true", "xxxx","own_date.csv").
+@mapping("own",0,"0","double").
+@mapping("own",1,"1","double").
+@mapping("own",2,"2","double").
+@mapping("own",3,"3","date").
+@mapping("own",4,"4","date").
+@timeMapping("own",3,4,#T,#T).
+@output("controlOutput").
+controlOutput(N0,N1) :- control(N0,N1).
+control(N0,N1) :- setOwn(N0,N1,N2).
+control(N0,N1) :- own(N0,N1,N2).
+controlOwn(N0,N1,N2,N3) :- own(N1,N2,N3), control(N0,N1).
+setOwn(N0,N1,N2) :- setOwn2(N0,N1,N2).
+setOwn(N0,N1,N2) :- setOwn1(N0,N1,N2).
+setOwn2(N0,N1,N2) :- own(N0,N1,N3), N2 = msum(N3).
+setOwn1(N0,N1,N2) :- controlOwn(N0,N3,N1,N4), N2 = msum(N4, <N3>).

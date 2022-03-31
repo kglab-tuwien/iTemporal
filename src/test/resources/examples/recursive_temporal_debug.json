@@ -1,0 +1,101 @@
+{
+  "nodes": [
+    {
+      "name": "start",
+      "type": "Input",
+      "minArity": 2,
+      "maxArity": 2,
+      "isCyclic": false,
+      "sccId": 2
+    },
+    {
+      "name": "a",
+      "type": "General",
+      "minArity": 2,
+      "maxArity": 2,
+      "isCyclic": false,
+      "sccId": 1
+    },
+    {
+      "name": "b",
+      "type": "General",
+      "minArity": 2,
+      "maxArity": 2,
+      "isCyclic": false,
+      "sccId": 1
+    },
+    {
+      "name": "c",
+      "type": "General",
+      "minArity": 2,
+      "maxArity": 2,
+      "isCyclic": false,
+      "sccId": 1
+    },
+    {
+      "name": "end",
+      "type": "Output",
+      "minArity": 2,
+      "maxArity": 2,
+      "isCyclic": false,
+      "sccId": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "a",
+      "type": "UnionEdge",
+      "isCyclic": false,
+      "termOrder": [
+        0,
+        1
+      ]
+    },
+    {
+      "from": "c",
+      "to": "a",
+      "type": "UnionEdge",
+      "isCyclic": true,
+      "termOrder": [
+        0,
+        1
+      ]
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "type": "DiamondMinusEdge",
+      "isCyclic": true,
+      "termOrder": [
+        0,
+        1
+      ],
+      "t1": 4000.0,
+      "t2": 5000.0
+    },
+    {
+      "from": "b",
+      "to": "c",
+      "type": "ITAEdge",
+      "isCyclic": true,
+      "termOrder": [
+        0,
+        2
+      ],
+      "numberOfGroupingTerms": 1,
+      "numberOfContributors": 0,
+      "aggregationType": "Sum"
+    },
+    {
+      "from": "b",
+      "to": "end",
+      "type": "LinearEdge",
+      "isCyclic": false,
+      "termOrder": [
+        1,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+@input("g551").
+@bind("g551", "csv useHeaders=true", "xxxx","g551_date.csv").
+@mapping("g551",0,"0","double").
+@mapping("g551",1,"1","double").
+@mapping("g551",2,"2","double").
+@mapping("g551",3,"3","date").
+@mapping("g551",4,"4","date").
+@timeMapping("g551",3,4,#T,#T).
+@input("g552").
+@bind("g552", "csv useHeaders=true", "xxxx","g552_date.csv").
+@mapping("g552",0,"0","date").
+@mapping("g552",1,"1","date").
+@timeMapping("g552",0,1,#T,#T).
+@output("g553").
+g553(N0,N1,N2) :- g556(N2,N1,N0).
+g554 :- <->[17.0,73.0] g557(N1,N0,N2).
+g555(N0,N1,N2) :- g558(N1,N0,N2), g552.
+g556(N0,N1,N2) :- g622(N0,N2,N1), g624(N0,N1).
+g557(N0,N1,N2) :- <+>[19.0,78.0] g562(N1,N0,N2).
+g558(N0,N1,N2) :- g551(N0,N1,N2).
+g562(N0,N1,N2) :- g619(N0,N1,N3), N2 = min(N3).
+g575 :- [-][16.0,79.0] g554.
+g619(N0,N1,N2) :- /\1 days g555(N0,N1,N2).
+g622(N0,N1,N2) :- © g557(N0,N1,N2).
+g623(N0,N1,N2) :- g622(N0,N2,N1), g575.
+g624(N0,N1) :- <+>[18.0,74.0] g623(N0,N1,N2).

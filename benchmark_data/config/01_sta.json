@@ -1,0 +1,133 @@
+{
+  "properties": {
+    "nodes": 2,
+    "inputNodes": 1,
+    "outputNodes": 1,
+    "multiEdgeRules": 0.3,
+    "recursiveRules": 0.1,
+    "recursiveComplexity": 0.1,
+    "coreMultiEdgeRules": 1,
+    "multiEdgeTemporalRules": 0,
+    "coreSingleEdgeRules": 0,
+    "singleEdgeTemporalRules": 0,
+    "aggregationRules": 1,
+    "linearRules": 1,
+    "intersectionRules": 0.5,
+    "unionRules": 0.5,
+    "diamondMinusRules": 0.4,
+    "diamondPlusRules": 0.4,
+    "boxMinusRules": 0.1,
+    "boxPlusRules": 0.1,
+    "sinceRules": 0.5,
+    "untilRules": 0.5,
+    "spanningTemporalAggregationRules": 0.3,
+    "movingWindowTemporalAggregationRules": 0,
+    "instantaneousTemporalAggregationRules": 0,
+    "averageOutputArity": 3,
+    "varianceOutputArity": 0,
+    "averageNumberOfContributorTerms": 0,
+    "varianceNumberOfContributorTerms": 0,
+    "averageNumberOfGroupByTerms": 2,
+    "varianceNumberOfGroupByTerms": 0,
+    "averageNumberOfOverlappingJoinTerms": 1,
+    "varianceNumberOfOverlappingJoinTerms": 1,
+    "temporalFactor": 1000,
+    "averageNumberOfTemporalUnitsT1": 1,
+    "varianceNumberOfTemporalUnitsT1": 1,
+    "averageNumberOfTemporalUnitsT2": 3,
+    "varianceNumberOfTemporalUnitsT2": 1,
+    "temporalMaxPrecision": 0,
+    "cardinalityTermDomain": 1000,
+    "averageAmountOfGeneratedOutputs": 10,
+    "varianceAmountOfGeneratedOutputs": 3,
+    "outputTimestampStart": 1577836800000,
+    "outputTimestampEnd": 1640995200000,
+    "averageOutputIntervalDuration": 10,
+    "varianceOutputIntervalDuration": 1,
+    "averageAggregationSelectivity": 0.2,
+    "varianceAggregationSelectivity": 0.02,
+    "unionInclusionPercentage": 0.6,
+    "temporalInclusionPercentage": 0.6,
+    "path": "xxxx",
+    "generateTimePoints": true,
+    "averageAggregationBucket": 1,
+    "varianceAggregationBucket": 0,
+    "percentageViaContributor": 0.7,
+    "outputCsvHeader": true,
+    "outputQuestDB": false
+  },
+  "graphInternal": {
+    "nodes": [
+      {
+        "name": "start",
+        "type": "Input",
+        "minArity": 3,
+        "maxArity": 3,
+        "isCyclic": false,
+        "sccId": 2
+      },
+      {
+        "name": "end",
+        "type": "Output",
+        "minArity": 3,
+        "maxArity": 3,
+        "isCyclic": false,
+        "sccId": 0
+      },
+      {
+        "name": "g2",
+        "type": "General",
+        "minArity": 3,
+        "maxArity": 3,
+        "isCyclic": false,
+        "sccId": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "g2",
+        "to": "end",
+        "type": "ITAEdge",
+        "isCyclic": false,
+        "uniqueId": "g68",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1,
+          3
+        ],
+        "numberOfGroupingTerms": 2,
+        "numberOfContributors": 0,
+        "aggregationType": "Sum",
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Sum"
+      },
+      {
+        "from": "start",
+        "to": "g2",
+        "type": "TriangleUpEdge",
+        "isCyclic": false,
+        "uniqueId": "g67",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1,
+          2
+        ],
+        "unit": "Month",
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1
+      }
+    ]
+  }
+}

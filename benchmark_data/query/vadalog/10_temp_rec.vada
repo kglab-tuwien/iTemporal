@@ -1,0 +1,35 @@
+@temporal(2021-02-24,2021-02-26).
+@input("g220").
+@bind("g220", "csv useHeaders=true", "xxxx","g220_date.csv").
+@mapping("g220",0,"0","double").
+@mapping("g220",1,"1","double").
+@mapping("g220",2,"2","double").
+@mapping("g220",3,"3","double").
+@mapping("g220",4,"4","date").
+@mapping("g220",5,"5","date").
+@timeMapping("g220",4,5,#T,#T).
+@input("g221").
+@bind("g221", "csv useHeaders=true", "xxxx","g221_date.csv").
+@mapping("g221",0,"0","double").
+@mapping("g221",1,"1","double").
+@mapping("g221",2,"2","double").
+@mapping("g221",3,"3","double").
+@mapping("g221",4,"4","date").
+@mapping("g221",5,"5","date").
+@timeMapping("g221",4,5,#T,#T).
+@output("g222").
+g222(N0,N1,N2,N3) :- g254(N3,N0,N2,N1).
+g223(N0,N1,N2,N3) :- g227(N0,N1,N2,N3), g250(N0,N1,N2,N3).
+g224(N0,N1,N2,N3) :- g230(N1,N3,N0,N2).
+g224(N0,N1,N2,N3) :- g254(N0,N1,N2,N3).
+g225(N0,N1,N2,N3) :- g228(N0,N1,N2,N3).
+g225(N0,N1,N2,N3) :- g250(N0,N1,N2,N3).
+g226(N0,N1,N2,N3) :- [-][1.0,68.0] g220(N3,N1,N2,N0).
+g227(N0,N1,N2,N3) :- g226(N1,N0,N2,N3).
+g227(N0,N1,N2,N3) :- g223(N0,N1,N2,N3).
+g228(N0,N1,N2,N3) :- g224(N0,N1,N2,N3).
+g228(N0,N1,N2,N3) :- g225(N0,N1,N2,N3).
+g230(N0,N1,N2,N3) :- <->[0.0,67.0] g221(N1,N3,N0,N2).
+g249(N0,N1,N2,N3) :- g225(N0,N1,N2,N3).
+g250(N0,N1,N2,N3) :- [-][2.0,68.0] g249(N0,N1,N2,N3).
+g254(N0,N1,N2,N3) :- <+>[1.0,69.0] g223(N0,N1,N2,N3).

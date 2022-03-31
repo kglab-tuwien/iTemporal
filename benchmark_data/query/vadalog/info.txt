@@ -1,0 +1,3 @@
+Recursive Temporal queries use a restriction of time points as infinite reasoning is currrently not implemented.
+The restriction is also currently targeted in such a range that for the smallest example we get at least some result in an accetable time.
+This has to be removed at later steps, when the implementation is fully supporting infinite reasoning, at the moment such programs would not terminate.

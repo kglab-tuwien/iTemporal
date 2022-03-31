@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "name": "start",
+      "type": "General"
+    },
+    {
+      "name": "a",
+      "type": "General"
+    },
+    {
+      "name": "b",
+      "type": "General"
+    },
+    {
+      "name": "end",
+      "type": "General"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "a",
+      "type": "UnionEdge"
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "type": "DiamondMinusEdge"
+    },
+    {
+      "from": "b",
+      "to": "a",
+      "type": "UnionEdge"
+    },
+    {
+      "from": "b",
+      "to": "end",
+      "type": "LinearEdge"
+    }
+  ]
+}

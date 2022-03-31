@@ -1,0 +1,412 @@
+{
+  "properties": {
+    "nodes": 13,
+    "inputNodes": 2,
+    "outputNodes": 1,
+    "multiEdgeRules": 0.3,
+    "recursiveRules": 0,
+    "recursiveComplexity": 0,
+    "coreMultiEdgeRules": 1,
+    "multiEdgeTemporalRules": 0,
+    "coreSingleEdgeRules": 0,
+    "singleEdgeTemporalRules": 1,
+    "aggregationRules": 0,
+    "linearRules": 1,
+    "intersectionRules": 0.5,
+    "unionRules": 0.5,
+    "diamondMinusRules": 0.25,
+    "diamondPlusRules": 0.25,
+    "boxMinusRules": 0.25,
+    "boxPlusRules": 0.25,
+    "sinceRules": 0.5,
+    "untilRules": 0.5,
+    "spanningTemporalAggregationRules": 0,
+    "movingWindowTemporalAggregationRules": 0,
+    "instantaneousTemporalAggregationRules": 1,
+    "averageOutputArity": 2,
+    "varianceOutputArity": 0,
+    "averageNumberOfContributorTerms": 2,
+    "varianceNumberOfContributorTerms": 0,
+    "averageNumberOfGroupByTerms": 1,
+    "varianceNumberOfGroupByTerms": 0,
+    "averageNumberOfOverlappingJoinTerms": 1,
+    "varianceNumberOfOverlappingJoinTerms": 0,
+    "temporalFactor": 1000,
+    "averageNumberOfTemporalUnitsT1": 29,
+    "varianceNumberOfTemporalUnitsT1": 2,
+    "averageNumberOfTemporalUnitsT2": 76,
+    "varianceNumberOfTemporalUnitsT2": 2,
+    "temporalMaxPrecision": 0,
+    "cardinalityTermDomain": 1000,
+    "averageAmountOfGeneratedOutputs": 10,
+    "varianceAmountOfGeneratedOutputs": 3,
+    "outputTimestampStart": 1577836800000,
+    "outputTimestampEnd": 1640995200000,
+    "averageOutputIntervalDuration": 10,
+    "varianceOutputIntervalDuration": 1,
+    "averageAggregationSelectivity": 0.2,
+    "varianceAggregationSelectivity": 0.02,
+    "unionInclusionPercentage": 0.6,
+    "temporalInclusionPercentage": 0.6,
+    "path": "xxxx",
+    "generateTimePoints": false,
+    "averageAggregationBucket": 1,
+    "varianceAggregationBucket": 0,
+    "percentageViaContributor": 0.7,
+    "outputCsvHeader": true,
+    "outputQuestDB": false
+  },
+  "graphInternal": {
+    "nodes": [
+      {
+        "name": "g774",
+        "type": "Input",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 10
+      },
+      {
+        "name": "g775",
+        "type": "Input",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 11
+      },
+      {
+        "name": "g776",
+        "type": "Output",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 0
+      },
+      {
+        "name": "g777",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 7
+      },
+      {
+        "name": "g778",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 2
+      },
+      {
+        "name": "g779",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 5
+      },
+      {
+        "name": "g780",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 9
+      },
+      {
+        "name": "g781",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 8
+      },
+      {
+        "name": "g786",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 6
+      },
+      {
+        "name": "g795",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 4
+      },
+      {
+        "name": "g798",
+        "type": "General",
+        "minArity": 1,
+        "maxArity": 1,
+        "isCyclic": false,
+        "sccId": 3
+      },
+      {
+        "name": "g801",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "g779",
+        "to": "g798",
+        "type": "DiamondMinusEdge",
+        "isCyclic": false,
+        "uniqueId": "g840",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 28000,
+        "t2": 77000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g801",
+        "to": "g776",
+        "type": "DiamondMinusEdge",
+        "isCyclic": false,
+        "uniqueId": "g841",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 29000,
+        "t2": 78000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g777",
+        "to": "g786",
+        "type": "DiamondPlusEdge",
+        "isCyclic": false,
+        "uniqueId": "g842",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 30000,
+        "t2": 78000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g779",
+        "to": "g795",
+        "type": "BoxMinusEdge",
+        "isCyclic": false,
+        "uniqueId": "g843",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 29000,
+        "t2": 75000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g780",
+        "to": "g781",
+        "type": "DiamondMinusEdge",
+        "isCyclic": false,
+        "uniqueId": "g844",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 29000,
+        "t2": 74000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g774",
+        "to": "g780",
+        "type": "DiamondPlusEdge",
+        "isCyclic": false,
+        "uniqueId": "g845",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 30000,
+        "t2": 77000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g786",
+        "to": "g779",
+        "type": "BoxPlusEdge",
+        "isCyclic": false,
+        "uniqueId": "g846",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 28000,
+        "t2": 76000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g778",
+        "to": "g801",
+        "type": "DiamondPlusEdge",
+        "isCyclic": false,
+        "uniqueId": "g847",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "t1": 30000,
+        "t2": 75000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g795",
+        "to": "g778",
+        "type": "IntersectionEdge",
+        "isCyclic": false,
+        "uniqueId": "g848",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "overlappingTerms": 1,
+        "nonOverlappingTerms": 1,
+        "isLeftEdge": false,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g798",
+        "to": "g778",
+        "type": "IntersectionEdge",
+        "isCyclic": false,
+        "uniqueId": "g849",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0
+        ],
+        "overlappingTerms": 1,
+        "nonOverlappingTerms": 0,
+        "isLeftEdge": false,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g781",
+        "to": "g777",
+        "type": "UnionEdge",
+        "isCyclic": false,
+        "uniqueId": "g850",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g775",
+        "to": "g777",
+        "type": "UnionEdge",
+        "isCyclic": false,
+        "uniqueId": "g851",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+@input("g774").
+@bind("g774", "csv useHeaders=true", "xxxx","g774_date.csv").
+@mapping("g774",0,"0","double").
+@mapping("g774",1,"1","double").
+@mapping("g774",2,"2","date").
+@mapping("g774",3,"3","date").
+@timeMapping("g774",2,3,#T,#T).
+@input("g775").
+@bind("g775", "csv useHeaders=true", "xxxx","g775_date.csv").
+@mapping("g775",0,"0","double").
+@mapping("g775",1,"1","double").
+@mapping("g775",2,"2","date").
+@mapping("g775",3,"3","date").
+@timeMapping("g775",2,3,#T,#T).
+@output("g776").
+g776(N0,N1) :- <->[29.0,78.0] g801(N0,N1).
+g777(N0,N1) :- g781(N0,N1).
+g777(N0,N1) :- g775(N0,N1).
+g778(N0,N1) :- g795(N0,N1), g798(N0).
+g779(N0,N1) :- [+][28.0,76.0] g786(N0,N1).
+g780(N0,N1) :- <+>[30.0,77.0] g774(N0,N1).
+g781(N0,N1) :- <->[29.0,74.0] g780(N0,N1).
+g786(N0,N1) :- <+>[30.0,78.0] g777(N0,N1).
+g795(N0,N1) :- [-][29.0,75.0] g779(N0,N1).
+g798(N0) :- <->[28.0,77.0] g779(N0,N1).
+g801(N0,N1) :- <+>[30.0,75.0] g778(N0,N1).

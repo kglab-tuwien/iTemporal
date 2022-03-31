@@ -1,0 +1,58 @@
+{
+  "nodes": [
+    {
+      "name": "start",
+      "type": "General"
+    },
+    {
+      "name": "a",
+      "type": "General"
+    },
+    {
+      "name": "b",
+      "type": "General"
+    },
+    {
+      "name": "c",
+      "type": "General"
+    },
+    {
+      "name": "end",
+      "type": "General",
+      "minArity": 3,
+      "maxArity": 3
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "a",
+      "type": "IntersectionEdge"
+    },
+    {
+      "from": "a",
+      "to": "b",
+      "type": "IntersectionEdge"
+    },
+    {
+      "from": "b",
+      "to": "a",
+      "type": "IntersectionEdge"
+    },
+    {
+      "from": "b",
+      "to": "c",
+      "type": "LinearEdge"
+    },
+    {
+      "from": "c",
+      "to": "b",
+      "type": "IntersectionEdge"
+    },
+    {
+      "from": "c",
+      "to": "end",
+      "type": "LinearEdge"
+    }
+  ]
+}

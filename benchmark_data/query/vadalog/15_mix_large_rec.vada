@@ -1,0 +1,38 @@
+@relaxedSafety.
+@temporal(2021-06-07 11:18:00,2021-06-07 11:19:00).
+@input("g952").
+@bind("g952", "csv useHeaders=true", "xxxx","g952_date.csv").
+@mapping("g952",0,"0","double").
+@mapping("g952",1,"1","double").
+@mapping("g952",2,"2","double").
+@mapping("g952",3,"3","date").
+@mapping("g952",4,"4","date").
+@timeMapping("g952",3,4,#T,#T).
+@input("g953").
+@bind("g953", "csv useHeaders=true", "xxxx","g953_date.csv").
+@mapping("g953",0,"0","double").
+@mapping("g953",1,"1","double").
+@mapping("g953",2,"2","date").
+@mapping("g953",3,"3","date").
+@timeMapping("g953",2,3,#T,#T).
+@output("g954").
+g954(N0,N1,N2,N3) :- <->[1.0,3.0] g956(N2,N0,N3,N1).
+g955(N0,N1) :- g957(N0,N1).
+g955(N0,N1) :- g959(N0,N1).
+g956(N0,N1,N2,N3) :- g1427(N0,N1), g1429(N0,N1,N2,N3).
+g957(N0,N1) :- g955(N0,N1).
+g957(N0,N1) :- g987(N0,N1).
+g958(N0,N1) :- g953(N0,N1).
+g958(N0,N1) :- g972(N0,N1).
+g959(N0,N1) :- g958(N0,N1).
+g959(N0,N1) :- g956(N0,N1,N2,N3).
+g960(N0,N1) :- g960(N0,N1).
+g960(N0,N1) :- g957(N0,N1).
+g970(N0,N1) :- g959(N0,N1).
+g971(N0,N1) :- g1406(N0,N2), N1 = max(N2).
+g972(N0,N1) :- g971(N0,N1).
+g987(N0,N1) :- [-][1.0,4.0] g955(N0,N1).
+g1406(N0,N1) :- <->[0.0,3.0] g970(N0,N1).
+g1427(N0,N1) :- © g960(N0,N1).
+g1428(N0,N1,N2,N3) :- g1427(N0,N1), g952(N0,N2,N3).
+g1429(N0,N1,N2,N3) :- <->[2.0,2.0] g1428(N0,N1,N2,N3).

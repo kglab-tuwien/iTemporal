@@ -1,0 +1,283 @@
+{
+  "properties": {
+    "nodes": 7,
+    "inputNodes": 1,
+    "outputNodes": 1,
+    "multiEdgeRules": 0.31,
+    "recursiveRules": 0.16,
+    "recursiveComplexity": 0.44,
+    "coreMultiEdgeRules": 1,
+    "multiEdgeTemporalRules": 0,
+    "coreSingleEdgeRules": 0.33,
+    "singleEdgeTemporalRules": 0,
+    "aggregationRules": 0.6699999999999999,
+    "linearRules": 1,
+    "intersectionRules": 0.5,
+    "unionRules": 0.5,
+    "diamondMinusRules": 0.4,
+    "diamondPlusRules": 0.4,
+    "boxMinusRules": 0.1,
+    "boxPlusRules": 0.1,
+    "sinceRules": 0.5,
+    "untilRules": 0.5,
+    "spanningTemporalAggregationRules": 0,
+    "movingWindowTemporalAggregationRules": 0,
+    "instantaneousTemporalAggregationRules": 1,
+    "averageOutputArity": 2,
+    "varianceOutputArity": 1,
+    "averageNumberOfContributorTerms": 0,
+    "varianceNumberOfContributorTerms": 1,
+    "averageNumberOfGroupByTerms": 2,
+    "varianceNumberOfGroupByTerms": 1,
+    "averageNumberOfOverlappingJoinTerms": 1,
+    "varianceNumberOfOverlappingJoinTerms": 1,
+    "temporalFactor": 1000,
+    "averageNumberOfTemporalUnitsT1": 0,
+    "varianceNumberOfTemporalUnitsT1": 4.7,
+    "averageNumberOfTemporalUnitsT2": 100,
+    "varianceNumberOfTemporalUnitsT2": 3.8,
+    "temporalMaxPrecision": 0,
+    "cardinalityTermDomain": 1000,
+    "averageAmountOfGeneratedOutputs": 1000,
+    "varianceAmountOfGeneratedOutputs": 0,
+    "outputTimestampStart": 1577836800000,
+    "outputTimestampEnd": 1640995200000,
+    "averageOutputIntervalDuration": 10,
+    "varianceOutputIntervalDuration": 1,
+    "averageAggregationSelectivity": 0.2,
+    "varianceAggregationSelectivity": 0.02,
+    "unionInclusionPercentage": 0.6,
+    "temporalInclusionPercentage": 0.6,
+    "path": "xxxx",
+    "generateTimePoints": true,
+    "averageAggregationBucket": 1,
+    "varianceAggregationBucket": 0,
+    "percentageViaContributor": 0.7,
+    "outputCsvHeader": true,
+    "outputQuestDB": false
+  },
+  "graphInternal": {
+    "nodes": [
+      {
+        "name": "g295",
+        "type": "Input",
+        "minArity": 1,
+        "maxArity": 1,
+        "isCyclic": false,
+        "sccId": 2
+      },
+      {
+        "name": "g296",
+        "type": "Output",
+        "minArity": 1,
+        "maxArity": 1,
+        "isCyclic": false,
+        "sccId": 0
+      },
+      {
+        "name": "g297",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 1
+      },
+      {
+        "name": "g298",
+        "type": "General",
+        "minArity": 1,
+        "maxArity": 1,
+        "isCyclic": false,
+        "sccId": 1
+      },
+      {
+        "name": "g305",
+        "type": "General",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 1
+      },
+      {
+        "name": "g309",
+        "type": "General",
+        "minArity": 1,
+        "maxArity": 1,
+        "isCyclic": false,
+        "sccId": 1
+      },
+      {
+        "name": "g310",
+        "type": "General",
+        "minArity": 1,
+        "maxArity": 1,
+        "isCyclic": false,
+        "sccId": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "g309",
+        "to": "g310",
+        "type": "LinearEdge",
+        "isCyclic": true,
+        "uniqueId": "g341",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0
+        ],
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g295",
+        "to": "g298",
+        "type": "UnionEdge",
+        "isCyclic": false,
+        "uniqueId": "g343",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0
+        ],
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g305",
+        "to": "g298",
+        "type": "UnionEdge",
+        "isCyclic": true,
+        "uniqueId": "g344",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          1
+        ],
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g298",
+        "to": "g297",
+        "type": "IntersectionEdge",
+        "isCyclic": true,
+        "uniqueId": "g345",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0
+        ],
+        "overlappingTerms": 0,
+        "nonOverlappingTerms": 1,
+        "isLeftEdge": false,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g310",
+        "to": "g297",
+        "type": "IntersectionEdge",
+        "isCyclic": true,
+        "uniqueId": "g346",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          1
+        ],
+        "overlappingTerms": 0,
+        "nonOverlappingTerms": 1,
+        "isLeftEdge": false,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g298",
+        "to": "g296",
+        "type": "ITAEdge",
+        "isCyclic": false,
+        "uniqueId": "g339",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          1
+        ],
+        "numberOfGroupingTerms": 0,
+        "numberOfContributors": 0,
+        "aggregationType": "Count",
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g298",
+        "to": "g309",
+        "type": "LinearEdge",
+        "isCyclic": true,
+        "uniqueId": "g342",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0
+        ],
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      },
+      {
+        "from": "g297",
+        "to": "g305",
+        "type": "ITAEdge",
+        "isCyclic": true,
+        "uniqueId": "g340",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          0,
+          2
+        ],
+        "numberOfGroupingTerms": 1,
+        "numberOfContributors": 0,
+        "aggregationType": "Sum",
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "t1": -1,
+        "t2": -1,
+        "unit": "Unknown"
+      }
+    ]
+  }
+}

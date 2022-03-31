@@ -1,0 +1,24 @@
+{
+  "nodes": [
+    {
+      "name": "start",
+      "type": "General"
+    },
+    {
+      "name": "end",
+      "type": "General",
+      "minArity": 3,
+      "maxArity": 3
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "end",
+      "type": "ITAEdge",
+      "numberOfContributors": 0,
+      "numberOfGroupingTerms": 2,
+      "aggregationType": "Sum"
+    }
+  ]
+}

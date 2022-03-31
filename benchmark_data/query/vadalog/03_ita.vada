@@ -1,0 +1,10 @@
+@input("start").
+@bind("start", "csv useHeaders=true", "xxxx","start_date.csv").
+@mapping("start",0,"0","double").
+@mapping("start",1,"1","double").
+@mapping("start",2,"2","double").
+@mapping("start",3,"3","date").
+@mapping("start",4,"4","date").
+@timeMapping("start",3,4,#T,#T).
+@output("end").
+end(N0,N1,N2) :- start(N0,N1,N3), N2 = msum(N3).

@@ -1,0 +1,9 @@
+@input("g732").
+@bind("g732", "csv useHeaders=true", "xxxx","g732_date.csv").
+@mapping("g732",0,"0","double").
+@mapping("g732",1,"1","double").
+@mapping("g732",2,"2","date").
+@mapping("g732",3,"3","date").
+@timeMapping("g732",2,3,#T,#T).
+@output("g733").
+g733(N0,N1) :- [-][29.0,76.0] g732(N1,N0).

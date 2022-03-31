@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "name": "a",
+      "type": "General"
+    },
+    {
+      "name": "b",
+      "type": "General"
+    },
+    {
+      "name": "c",
+      "type": "General"
+    },
+    {
+      "name": "d",
+      "type": "General"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b",
+      "type": "DiamondMinusEdge"
+    },
+    {
+      "from": "a",
+      "to": "c",
+      "type": "ITAEdge"
+    },
+    {
+      "from": "b",
+      "to": "d",
+      "type": "IntersectionEdge"
+    },
+    {
+      "from": "c",
+      "to": "d",
+      "type": "IntersectionEdge"
+    }
+  ]
+}

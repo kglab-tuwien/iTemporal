@@ -1,0 +1,17 @@
+@timeGranularity("days").
+@temporal(2021-01-01,2022-01-01).
+@input("g466").
+@bind("g466", "csv useHeaders=true", "xxxx","g466_date.csv").
+@mapping("g466",0,"0","double").
+@mapping("g466",1,"1","double").
+@mapping("g466",2,"2","double").
+@mapping("g466",3,"3","date").
+@mapping("g466",4,"4","date").
+@timeMapping("g466",3,4,#T,#T).
+@output("g467").
+g467(N0,N1,N2) :- g477(N1,N3,N0), N2 = min(N3).
+g468(N0,N1,N2) :- g469(N1,N0,N2).
+g468(N0,N1,N2) :- g470(N0,N1,N2).
+g469(N0,N1,N2) :- g466(N0,N2,N1).
+g470(N0,N1,N2) :- [-][2.0,5.0] g468(N0,N1,N2).
+g477(N0,N1,N2) :- <+>[1.0,1.0] g468(N2,N1,N0).

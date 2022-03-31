@@ -1,0 +1,14 @@
+@input("g295").
+@bind("g295", "csv useHeaders=true", "xxxx","g295_date.csv").
+@mapping("g295",0,"0","double").
+@mapping("g295",1,"1","date").
+@mapping("g295",2,"2","date").
+@timeMapping("g295",1,2,#T,#T).
+@output("g296").
+g296(N0) :- g298(N1), N0 = mcount(N1).
+g297(N0,N1) :- g298(N0), g310(N1).
+g298(N0) :- g295(N0).
+g298(N0) :- g305(N0,N1).
+g305(N0,N1) :- g297(N0,N2), N1 = msum(N2).
+g309(N0) :- g298(N0).
+g310(N0) :- g309(N0).

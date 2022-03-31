@@ -1,0 +1,20 @@
+@input("g1").
+@bind("g1", "csv useHeaders=true", "xxxx","g1_date.csv").
+@mapping("g1",0,"0","double").
+@mapping("g1",1,"1","double").
+@mapping("g1",2,"2","date").
+@mapping("g1",3,"3","date").
+@timeMapping("g1",2,3,#T,#T).
+@input("g2").
+@bind("g2", "csv useHeaders=true", "xxxx","g2_date.csv").
+@mapping("g2",0,"0","double").
+@mapping("g2",1,"1","double").
+@mapping("g2",2,"2","date").
+@mapping("g2",3,"3","date").
+@timeMapping("g2",2,3,#T,#T).
+@output("g3").
+g3(N0,N1) :- g4(N1,N0).
+g4(N0,N1) :- g10(N1,N0), g12(N0,N1).
+g10(N0,N1) :- © g1(N0,N1).
+g11(N0,N1) :- g10(N1,N0), g2(N0,N1).
+g12(N0,N1) :- <->[1.0,3.0] g11(N0,N1).

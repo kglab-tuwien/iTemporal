@@ -1,0 +1,29 @@
+plugins {
+    id("org.springframework.boot") version "2.6.1"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id 'java'
+}
+
+group 'at.ac.tuwien.dbai.kg'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+    implementation 'guru.nidi:graphviz-kotlin:0.18.1'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0')
+}
+
+test {
+    useJUnitPlatform()
+}

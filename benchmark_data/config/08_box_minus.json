@@ -1,0 +1,102 @@
+{
+  "properties": {
+    "nodes": 2,
+    "inputNodes": 1,
+    "outputNodes": 1,
+    "multiEdgeRules": 0,
+    "recursiveRules": 0,
+    "recursiveComplexity": 0,
+    "coreMultiEdgeRules": 1,
+    "multiEdgeTemporalRules": 0,
+    "coreSingleEdgeRules": 0,
+    "singleEdgeTemporalRules": 1,
+    "aggregationRules": 0,
+    "linearRules": 1,
+    "intersectionRules": 1,
+    "unionRules": 0,
+    "diamondMinusRules": 0,
+    "diamondPlusRules": 0,
+    "boxMinusRules": 1,
+    "boxPlusRules": 0,
+    "sinceRules": 0.5,
+    "untilRules": 0.5,
+    "spanningTemporalAggregationRules": 0,
+    "movingWindowTemporalAggregationRules": 0,
+    "instantaneousTemporalAggregationRules": 1,
+    "averageOutputArity": 2,
+    "varianceOutputArity": 0,
+    "averageNumberOfContributorTerms": 2,
+    "varianceNumberOfContributorTerms": 0,
+    "averageNumberOfGroupByTerms": 1,
+    "varianceNumberOfGroupByTerms": 0,
+    "averageNumberOfOverlappingJoinTerms": 1,
+    "varianceNumberOfOverlappingJoinTerms": 0,
+    "temporalFactor": 1000,
+    "averageNumberOfTemporalUnitsT1": 29,
+    "varianceNumberOfTemporalUnitsT1": 2,
+    "averageNumberOfTemporalUnitsT2": 76,
+    "varianceNumberOfTemporalUnitsT2": 2,
+    "temporalMaxPrecision": 0,
+    "cardinalityTermDomain": 1000,
+    "averageAmountOfGeneratedOutputs": 10,
+    "varianceAmountOfGeneratedOutputs": 3,
+    "outputTimestampStart": 1577836800000,
+    "outputTimestampEnd": 1640995200000,
+    "averageOutputIntervalDuration": 10,
+    "varianceOutputIntervalDuration": 1,
+    "averageAggregationSelectivity": 0.2,
+    "varianceAggregationSelectivity": 0.02,
+    "unionInclusionPercentage": 0.6,
+    "temporalInclusionPercentage": 0.6,
+    "path": "xxxx",
+    "generateTimePoints": false,
+    "averageAggregationBucket": 1,
+    "varianceAggregationBucket": 0,
+    "percentageViaContributor": 0.7,
+    "outputCsvHeader": true,
+    "outputQuestDB": false
+  },
+  "graphInternal": {
+    "nodes": [
+      {
+        "name": "g732",
+        "type": "Input",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 1
+      },
+      {
+        "name": "g733",
+        "type": "Output",
+        "minArity": 2,
+        "maxArity": 2,
+        "isCyclic": false,
+        "sccId": 0
+      }
+    ],
+    "edges": [
+      {
+        "from": "g732",
+        "to": "g733",
+        "type": "BoxMinusEdge",
+        "isCyclic": false,
+        "uniqueId": "g738",
+        "termOrderShuffleAllowed": true,
+        "termOrder": [
+          1,
+          0
+        ],
+        "t1": 29000,
+        "t2": 76000,
+        "overlappingTerms": -1,
+        "isLeftEdge": false,
+        "nonOverlappingTerms": -1,
+        "aggregationType": "Unknown",
+        "numberOfGroupingTerms": -1,
+        "numberOfContributors": -1,
+        "unit": "Unknown"
+      }
+    ]
+  }
+}

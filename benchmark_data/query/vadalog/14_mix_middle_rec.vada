@@ -1,0 +1,28 @@
+@relaxedSafety.
+@timeGranularity("days").
+@temporal(2021-04-01,2021-05-01).
+@input("g666").
+@bind("g666", "csv useHeaders=true", "xxxx","g666_date.csv").
+@mapping("g666",0,"0","double").
+@mapping("g666",1,"1","double").
+@mapping("g666",2,"2","date").
+@mapping("g666",3,"3","date").
+@timeMapping("g666",2,3,#T,#T).
+@input("g667").
+@bind("g667", "csv useHeaders=true", "xxxx","g667_date.csv").
+@mapping("g667",0,"0","double").
+@mapping("g667",1,"1","double").
+@mapping("g667",2,"2","date").
+@mapping("g667",3,"3","date").
+@timeMapping("g667",2,3,#T,#T).
+@output("g668").
+g668(N0,N1,N2,N3) :- g818(N0,N4,N1,N2), N3 = mcount(N4).
+g669(N0,N1,N2,N3) :- g673(N0,N1), g670(N2,N3).
+g670(N0,N1) :- g681(N1,N0).
+g670(N0,N1) :- g684(N0,N1,N2,N3).
+g671(N0,N1) :- g666(N0,N2), N1 = msum(N2).
+g673(N0,N1) :- g805(N0,N2), N1 = mcount(N2).
+g681(N0,N1) :- g671(N0,N1).
+g684(N0,N1,N2,N3) :- <->[0.0,2.0] g669(N0,N1,N2,N3).
+g805(N0,N1) :- <->[0.0,4.0] g667(N0,N1).
+g818(N0,N1,N2,N3) :- /\1 months g684(N2,N0,N1,N3).

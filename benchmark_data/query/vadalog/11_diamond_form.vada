@@ -1,0 +1,13 @@
+@input("a").
+@bind("a", "csv useHeaders=true", "xxxx","a_date.csv").
+@mapping("a",0,"0","double").
+@mapping("a",1,"1","double").
+@mapping("a",2,"2","double").
+@mapping("a",3,"3","double").
+@mapping("a",4,"4","date").
+@mapping("a",5,"5","date").
+@timeMapping("a",4,5,#T,#T).
+@output("d").
+d(N0,N1) :- b(N0), c(N0,N1).
+b(N0) :- <->[2.0,5.0] a(N3,N0,N1,N2).
+c(N0,N1) :- a(N4,N3,N0,N2), N1 = msum(N4, <N2,N3>).

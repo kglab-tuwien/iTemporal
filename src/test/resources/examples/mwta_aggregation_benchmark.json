@@ -1,0 +1,59 @@
+{
+  "nodes": [
+    {
+      "name": "start",
+      "type": "Input",
+      "minArity": 3,
+      "maxArity": 3,
+      "isCyclic": false,
+      "sccId": 2
+    },
+    {
+      "name": "end",
+      "type": "Output",
+      "minArity": 3,
+      "maxArity": 3,
+      "isCyclic": false,
+      "sccId": 0
+    },
+    {
+      "name": "g3",
+      "type": "General",
+      "minArity": 3,
+      "maxArity": 3,
+      "isCyclic": false,
+      "sccId": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "g3",
+      "to": "end",
+      "type": "ITAEdge",
+      "isCyclic": false,
+      "uniqueId": "g5",
+      "termOrder": [
+        0,
+        1,
+        3
+      ],
+      "numberOfGroupingTerms": 2,
+      "numberOfContributors": 0,
+      "aggregationType": "Sum"
+    },
+    {
+      "from": "start",
+      "to": "g3",
+      "type": "DiamondMinusEdge",
+      "isCyclic": false,
+      "uniqueId": "g4",
+      "termOrder": [
+        0,
+        1,
+        2
+      ],
+      "t1": 0,
+      "t2": 10000.0
+    }
+  ]
+}

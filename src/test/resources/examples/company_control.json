@@ -1,0 +1,152 @@
+{
+  "nodes": [
+    {
+      "name": "own",
+      "type": "General",
+      "minArity": 3,
+      "maxArity": 3
+    },
+    {
+      "name": "control1",
+      "type": "General",
+      "minArity": 2,
+      "maxArity": 2
+    },
+    {
+      "name": "control2",
+      "type": "General",
+      "minArity": 2,
+      "maxArity": 2
+    },
+    {
+      "name": "control",
+      "type": "General",
+      "minArity": 2,
+      "maxArity": 2
+    },
+    {
+      "name": "controlOwn",
+      "type": "General",
+      "minArity": 4,
+      "maxArity": 4
+    },
+    {
+      "name": "setOwn",
+      "type": "General",
+      "minArity": 3,
+      "maxArity": 3
+    },
+    {
+      "name": "setOwn1",
+      "type": "General",
+      "minArity": 3,
+      "maxArity": 3
+    },
+    {
+      "name": "setOwn2",
+      "type": "General",
+      "minArity": 3,
+      "maxArity": 3
+    },
+    {
+      "name": "controlOutput",
+      "type": "Output",
+      "minArity": 2,
+      "maxArity": 2
+    }
+  ],
+  "edges": [
+    {
+      "from": "own",
+      "to": "control1",
+      "type": "ConditionalEdge",
+      "termOrder": [0,1,2],
+      "conditions": [
+        {
+          "type": "value",
+          "operator": "GREATER_EQUAL",
+          "variable": 2,
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "from": "setOwn",
+      "to": "control2",
+      "type": "ConditionalEdge",
+      "termOrder": [0,1,2],
+      "conditions": [
+        {
+          "type": "value",
+          "operator": "GREATER_EQUAL",
+          "variable": 2,
+          "value": 0.5
+        }
+      ]
+    },
+    {
+      "from": "control1",
+      "to": "control",
+      "type": "UnionEdge",
+      "termOrder": [0,1,2]
+    },
+    {
+      "from": "control2",
+      "to": "control",
+      "type": "UnionEdge",
+      "termOrder": [0,1,2]
+    },
+    {
+      "from": "control",
+      "to": "controlOwn",
+      "type": "IntersectionEdge",
+      "overlappingTerms": 1,
+      "nonOverlappingTerms": 1,
+      "termOrder": [0,1]
+    },
+    {
+      "from": "own",
+      "to": "controlOwn",
+      "type": "IntersectionEdge",
+      "overlappingTerms": 1,
+      "nonOverlappingTerms": 2,
+      "termOrder": [1,2,3]
+    },
+    {
+      "from": "controlOwn",
+      "to": "setOwn1",
+      "type": "ITAEdge",
+      "aggregationType": "Sum",
+      "numberOfGroupingTerms": 2,
+      "numberOfContributors": 1,
+      "termOrder": [0,3,1,4]
+    },
+    {
+      "from": "own",
+      "to": "setOwn2",
+      "type": "ITAEdge",
+      "aggregationType": "Sum",
+      "numberOfGroupingTerms": 2,
+      "numberOfContributors": 0,
+      "termOrder": [0,1,3]
+    },
+    {
+      "from": "setOwn1",
+      "to": "setOwn",
+      "type": "UnionEdge",
+      "termOrder": [0,1,2]
+    },
+    {
+      "from": "setOwn2",
+      "to": "setOwn",
+      "type": "UnionEdge",
+      "termOrder": [0,1,2]
+    },
+    {
+      "from": "control",
+      "to": "controlOutput",
+      "type": "LinearEdge",
+      "termOrder": [0,1]
+    }
+  ]
+}
