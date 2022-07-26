@@ -1,6 +1,7 @@
 package at.ac.tuwien.dbai.kg.iTemporal.core.contracts
 
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 
 /**
  * Contract used for registering an additional category assignment for single edges.
@@ -19,7 +20,7 @@ interface CategoryAssignmentSingleEdge:CategoryAssignment {
             }
         }
 
-        generationOrder.shuffle()
+        generationOrder.shuffle(RandomGenerator.sharedRandom)
 
         val edges = this.getGenericCategoryEdges(dependencyGraph)
 

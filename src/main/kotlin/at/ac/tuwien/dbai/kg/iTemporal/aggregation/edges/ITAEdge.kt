@@ -7,11 +7,11 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.Registry
 import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.Edge
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.Node
 import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator.sharedRandom
 import java.lang.RuntimeException
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
-import kotlin.random.Random
 
 class ITAEdge(
     override var from: Node,
@@ -145,17 +145,24 @@ class ITAEdge(
                     )
                 }
 
+                // This is the case, if we have an arity = 0
+                if (aggregationIndex < 0) {
+                    System.err.println("Warning: Aggregation index is negative. This is the case if arity 0 is used in combination with aggregation")
+                } else {
 
-                val aggregationResult = entry[aggregationIndex]
+                    val aggregationResult = entry[aggregationIndex]
 
-                // We only consider positive values (monotonicity)
-                if (aggregationResult == 0.0) {
-                    continue
+                    // We only consider positive values (monotonicity)
+                    if (aggregationResult == 0.0) {
+                        continue
+                    }
+
+                    if (aggregationResult < 0.0) {
+                        throw RuntimeException("Invalid Aggregation Result produced, this should not happen")
+                    }
                 }
 
-                if (aggregationResult < 0.0) {
-                    throw RuntimeException("Invalid Aggregation Result produced, this should not happen")
-                }
+                val aggregationResult: Double = if (aggregationIndex < 0) 1.0 else entry[aggregationIndex]
 
                 var previousBasket = listOf<MutableList<Double>>()
 
@@ -177,8 +184,8 @@ class ITAEdge(
                     if (index > 0) {
                         // implement copy operation (not necessary in first step, we just generate n different values per basket)
                         // we limit the copy to 50\% at most
-                        val copyAmount = Random.nextInt((previousBasket.size * 0.5).toInt())
-                        previousBasket = previousBasket.shuffled().take(copyAmount).map {
+                        val copyAmount = RandomGenerator.sharedRandom.nextInt((previousBasket.size * 0.5).toInt())
+                        previousBasket = previousBasket.shuffled(RandomGenerator.sharedRandom).take(copyAmount).map {
                             // Copy data for not modifying basket
                             val data = ArrayList(it)
                             data[from.minArity] = basket.first
@@ -227,9 +234,9 @@ class ITAEdge(
                     }
                     val countList:MutableList<Double>
                     if (!isCyclic) {
-                        countList = randomTermCountList.shuffled().toMutableList()
+                        countList = randomTermCountList.shuffled(RandomGenerator.sharedRandom).toMutableList()
                     } else {
-                        countList = randomTermCountList.take(aggregationResult.toInt()).shuffled().toMutableList()
+                        countList = randomTermCountList.take(aggregationResult.toInt()).shuffled(RandomGenerator.sharedRandom).toMutableList()
                     }
 
                     for (i in 0 until numberOfRelevantInput) {
@@ -263,14 +270,14 @@ class ITAEdge(
 
                     // Set random entry to max
                     if (this.aggregationType == AggregationType.Max) {
-                        val randomEntry = basketData.random()
+                        val randomEntry = basketData.random(sharedRandom)
                         basketData.remove(randomEntry)
                         randomEntry[aggregationFromIndex] = aggregationResult
                         basketData.add(randomEntry)
                     }
                     // Set random entry to min
                     if (this.aggregationType == AggregationType.Min) {
-                        val randomEntry = basketData.random()
+                        val randomEntry = basketData.random(sharedRandom)
                         basketData.remove(randomEntry)
                         randomEntry[aggregationFromIndex] = aggregationResult
                         basketData.add(randomEntry)
@@ -281,7 +288,7 @@ class ITAEdge(
                     // Create contributor elements
                     for (i in 0 until (numberOfInputTuples - numberOfRelevantInput)) {
                         // Select one entry
-                        val baseEntry = basketDataList[Random.nextInt(0, basketDataList.size)]
+                        val baseEntry = basketDataList[RandomGenerator.sharedRandom.nextInt(0, basketDataList.size)]
                         // Copy and modify
                         val copyEntry = baseEntry.mapIndexed { fI, d ->
                             if (fI == aggregationFromIndex) {
@@ -342,13 +349,13 @@ class ITAEdge(
                             var difference = aggregationResult - basketSum2
 
                             if (difference > 0.0) {
-                                val randomGroup = basketGroup.values.random()
+                                val randomGroup = basketGroup.values.random(sharedRandom)
                                 randomGroup.map { it[aggregationFromIndex] = it[aggregationFromIndex] + difference }
                                 difference = 0.0
                             }
                             if (difference < 0.0) {
                                 while (difference < 0.0) {
-                                    val randomGroup = basketGroup.values.filter {g -> g.any{it[aggregationFromIndex] > 0}}.random()
+                                    val randomGroup = basketGroup.values.filter {g -> g.any{it[aggregationFromIndex] > 0}}.random(sharedRandom)
                                     val subtractValue = min(-difference, randomGroup.maxOf { it[aggregationFromIndex] })
                                     difference += subtractValue
                                     randomGroup.map { it[aggregationFromIndex] = it[aggregationFromIndex] - subtractValue }
@@ -374,7 +381,9 @@ class ITAEdge(
             }
         }
 
-        assert (newData.none { it[aggregationFromIndex] < 0 })
+        if (aggregationFromIndex >= 0) {
+            assert(newData.none { it[aggregationFromIndex] < 0 })
+        }
 
         this.from.data = newData + this.from.data
     }

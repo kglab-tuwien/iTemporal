@@ -9,7 +9,6 @@ import {
 } from "../api/GeneratorAPI";
 import {edgeOptions} from "../edge/edgeOptions";
 
-
 const saveFile = async (blob, fileName) => {
     const a = document.createElement('a');
     a.download = fileName;

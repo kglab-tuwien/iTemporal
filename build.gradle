@@ -1,9 +1,17 @@
 plugins {
-    id("org.springframework.boot") version "2.6.1"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id "org.springframework.boot" version "2.6.1"
+    //id "io.spring.dependency-management" version "1.0.11.RELEASE"
     id 'org.jetbrains.kotlin.jvm' version '1.6.0'
     id 'java'
 }
+
+
+springBoot {
+    mainClass.set("at.ac.tuwien.dbai.kg.iTemporal.Main")
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
 
 group 'at.ac.tuwien.dbai.kg'
 version '1.0-SNAPSHOT'

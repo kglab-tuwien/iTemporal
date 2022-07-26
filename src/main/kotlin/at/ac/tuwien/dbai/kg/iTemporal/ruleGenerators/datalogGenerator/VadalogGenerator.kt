@@ -12,12 +12,12 @@ import at.ac.tuwien.dbai.kg.iTemporal.temporal.TriangleUnit
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.edges.*
 import java.io.File
 
-object DatalogGenerator:RuleGeneration {
+object VadalogGenerator:RuleGeneration {
 
     override fun getPriority(): Int = 666
 
     override fun getLanguage(): String {
-        return "Datalog"
+        return "Vadalog"
     }
 
     override fun convert(dependencyGraph: DependencyGraph):DependencyGraph {

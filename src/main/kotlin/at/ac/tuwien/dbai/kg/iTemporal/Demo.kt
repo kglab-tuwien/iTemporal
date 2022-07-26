@@ -109,6 +109,3 @@ class BenchmarkGeneratorResource {
 
 }
 
-fun main(args: Array<String>) {
-    runApplication<Demo>(*args)
-}

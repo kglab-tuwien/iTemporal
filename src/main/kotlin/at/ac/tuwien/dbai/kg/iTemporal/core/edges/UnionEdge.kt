@@ -5,7 +5,6 @@ import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 import at.ac.tuwien.dbai.kg.iTemporal.core.Registry
 import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.Edge
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.Node
-import kotlin.random.Random
 
 class UnionEdge(
     override var from: Node,
@@ -22,7 +21,7 @@ class UnionEdge(
 
         for(entry in to.data) {
             // Include edge?
-            val isIncluded = Random.nextDouble()
+            val isIncluded = RandomGenerator.sharedRandom.nextDouble()
 
             if(isIncluded > Registry.properties.unionInclusionPercentage) {
                 continue

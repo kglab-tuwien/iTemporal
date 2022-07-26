@@ -2,6 +2,7 @@ package at.ac.tuwien.dbai.kg.iTemporal.aggregation.edges
 
 import at.ac.tuwien.dbai.kg.iTemporal.aggregation.AggregationType
 import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.SingleEdge
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 import com.google.gson.JsonObject
 
 /**
@@ -40,7 +41,7 @@ interface AggregationEdge:SingleEdge {
             // Calculate random order of input properties including skipping aggregation properties.
             val data = Array(fromArity) { index -> index + if (index >= this.to.minArity - 1) 1 else 0 }.toList()
             if (shuffle) {
-                this.termOrder = data.shuffled()
+                this.termOrder = data.shuffled(RandomGenerator.sharedRandom)
             } else {
                 this.termOrder = data
             }

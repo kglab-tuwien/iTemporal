@@ -10,7 +10,6 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.Node
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.NodeType
 import at.ac.tuwien.dbai.kg.iTemporal.core.edges.GenericEdge
 import kotlin.math.*
-import kotlin.random.Random
 
 class GraphGenerator : GraphGenerator {
     override fun getPriority(): Int = -1
@@ -113,7 +112,7 @@ class GraphGenerator : GraphGenerator {
             for (i in 0 until numberOfInputNodes) {
                 val iNode = Node(type = NodeType.Input)
                 inputNodes.add(iNode)
-                val cNode = multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size < 2 }.random()
+                val cNode = multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size < 2 }.random(RandomGenerator.sharedRandom)
                 val pathInfo = this.createPath(iNode, cNode)
                 dependencyGraph.nodes.addAll(pathInfo.first)
                 pathInfo.second.forEach { dependencyGraph.addEdge(it) }
@@ -137,7 +136,7 @@ class GraphGenerator : GraphGenerator {
                         pathInfo.second.forEach { dependencyGraph.addEdge(it) }
                         break
                     }
-                    val cNode = nextMultiNodes.random()
+                    val cNode = nextMultiNodes.random(RandomGenerator.sharedRandom)
                     val pathInfo = this.createPath(fullMultiNode, cNode)
                     dependencyGraph.nodes.addAll(pathInfo.first)
                     pathInfo.second.forEach { dependencyGraph.addEdge(it) }
@@ -149,13 +148,13 @@ class GraphGenerator : GraphGenerator {
 
             // Each component can be connected to itself, if there is at least one input free creating a simple recursion
             val possibleMultiNodes =
-                multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size < 2 }.shuffled().toMutableList()
+                multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size < 2 }.shuffled(RandomGenerator.sharedRandom).toMutableList()
 
             if (possibleMultiNodes.isNotEmpty()) {
 
 
                 val supportiveRecursionMultiNode =
-                    multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().isEmpty() }.shuffled().toMutableList()
+                    multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().isEmpty() }.shuffled(RandomGenerator.sharedRandom).toMutableList()
 
                 val maxRecursiveComponents = min(
                     numberOfRecursiveRules,
@@ -227,7 +226,7 @@ class GraphGenerator : GraphGenerator {
                         maximumRecursiveEdges = minimumRecursiveEdges
                     }
 
-                    val recursiveEdges = Random.nextInt(minimumRecursiveEdges, maximumRecursiveEdges + 1)
+                    val recursiveEdges = RandomGenerator.sharedRandom.nextInt(minimumRecursiveEdges, maximumRecursiveEdges + 1)
                     totalRecursiveEdges += recursiveEdges
 
                     // Here comes the logic for the creation of the SCC
@@ -239,7 +238,7 @@ class GraphGenerator : GraphGenerator {
                     val allSCCNodes = mutableListOf<Node>()
                     allSCCNodes.addAll(scc)
 
-                    val nodes = scc.shuffled().toMutableList()
+                    val nodes = scc.shuffled(RandomGenerator.sharedRandom).toMutableList()
 
                     // We start a path and continue the path until it reaches an existing node
                     var currentNode = nodes.removeFirst()
@@ -281,9 +280,9 @@ class GraphGenerator : GraphGenerator {
                         }
 
                         // If no targetNode found, we can connect the node to some node, that is not on the current path
-                        val targetNode = if (targetNodes.size > 1) targetNodes.random() else scc.filter {
+                        val targetNode = if (targetNodes.size > 1) targetNodes.random(RandomGenerator.sharedRandom) else scc.filter {
                             !reachingNodes[it]!!.contains(currentNode)
-                        }.random()
+                        }.random(RandomGenerator.sharedRandom)
 
                         // This node reaches now every node reached by the target node plus the target node itself
                         reachingNodes[currentNode]!!.add(targetNode)
@@ -349,7 +348,7 @@ class GraphGenerator : GraphGenerator {
                     }
 
                     // Create a random order to connect groups
-                    groups.shuffled()
+                    groups.shuffled(RandomGenerator.sharedRandom)
                     val groupToOpenNode = openNodes.associateBy { openNode ->
                         groups.withIndex().first { it.value.contains(openNode) }.index
                     }
@@ -362,7 +361,9 @@ class GraphGenerator : GraphGenerator {
                                 reachingNodes[groupNode].orEmpty().contains(groupNode)
                             }
 
-                        val randomSourceNode = if (randomSourceNodes.isNotEmpty()) randomSourceNodes.random() else {
+                        val randomSourceNode = if (randomSourceNodes.isNotEmpty()) randomSourceNodes.random(
+                            RandomGenerator.sharedRandom
+                        ) else {
                             groups[groupId].first { groupNode -> reachingNodes[groupNode].orEmpty().isEmpty() }
                         }
 
@@ -372,7 +373,7 @@ class GraphGenerator : GraphGenerator {
                         } else {
                             groups[targetGroupId].filter { groupNode ->
                                 reachingNodes[groupNode].orEmpty().contains(groupNode)
-                            }.random()
+                            }.random(RandomGenerator.sharedRandom)
                         }
 
                         // Add path to dependency graph
@@ -406,9 +407,9 @@ class GraphGenerator : GraphGenerator {
                         val fromNode = if (paths < recursiveEdges) {
                             // In such a case we require a source node from an edge that is not one before the multi edges
                             paths++
-                            allSCCNodes.filter { !nodesInlcudingLastMultiEdge.contains(it) }.random()
+                            allSCCNodes.filter { !nodesInlcudingLastMultiEdge.contains(it) }.random(RandomGenerator.sharedRandom)
                         } else {
-                            nodesInlcudingLastMultiEdge.random()
+                            nodesInlcudingLastMultiEdge.random(RandomGenerator.sharedRandom)
                             // We add a path just from some edge before the previous multi edge
                         }
 
@@ -432,13 +433,13 @@ class GraphGenerator : GraphGenerator {
                             if (sccNextScc.isEmpty()) {
                                 sccNextScc = sccs[i + 1].filter { dependencyGraph.inEdges[it].orEmpty().size == 1 }
                             }
-                            sccNextScc.random()
+                            sccNextScc.random(RandomGenerator.sharedRandom)
                         }
-                        val pathInfo = this.createPath(allSCCNodes.random(), nextNode)
+                        val pathInfo = this.createPath(allSCCNodes.random(RandomGenerator.sharedRandom), nextNode)
                         dependencyGraph.nodes.addAll(pathInfo.first)
                         pathInfo.second.forEach { dependencyGraph.addEdge(it) }
                     } else {
-                        val pathInfo = this.createPath(allSCCNodes.random(), outputNodes.removeFirst())
+                        val pathInfo = this.createPath(allSCCNodes.random(RandomGenerator.sharedRandom), outputNodes.removeFirst())
                         dependencyGraph.nodes.addAll(pathInfo.first)
                         pathInfo.second.forEach { dependencyGraph.addEdge(it) }
                     }
@@ -450,7 +451,7 @@ class GraphGenerator : GraphGenerator {
         // connect remaining output nodes by getting a path from a random node in the dependency graph
         while (outputNodes.isNotEmpty()) {
             val pathInfo = this.createPath(
-                dependencyGraph.nodes.filter { it.type != NodeType.Output }.random(),
+                dependencyGraph.nodes.filter { it.type != NodeType.Output }.random(RandomGenerator.sharedRandom),
                 outputNodes.removeFirst()
             )
             dependencyGraph.nodes.addAll(pathInfo.first)

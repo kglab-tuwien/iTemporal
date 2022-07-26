@@ -12,7 +12,6 @@ import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
-import kotlin.random.Random
 
 class GraphGenerator2 : GraphGenerator {
     override fun getPriority(): Int = -2
@@ -51,7 +50,10 @@ class GraphGenerator2 : GraphGenerator {
         // The last path takes the remaining ones (hence we start with 1)
         for (i in 1 until paths) {
             var nextPathLength =
-                RandomGenerator.getNextArityWith0(mean = averagePathAmount, variance = averagePathAmount * variancePathLength)
+                RandomGenerator.getNextArityWith0(
+                    mean = averagePathAmount,
+                    variance = averagePathAmount * variancePathLength
+                )
             nextPathLength = max(0, nextPathLength)
             nextPathLength = min(nodes - usedNodes, nextPathLength)
             usedNodes += nextPathLength
@@ -60,7 +62,7 @@ class GraphGenerator2 : GraphGenerator {
 
         pathLengths.add(nodes - usedNodes)
 
-        pathLengths.shuffle()
+        pathLengths.shuffle(RandomGenerator.sharedRandom)
     }
 
     /**
@@ -98,7 +100,8 @@ class GraphGenerator2 : GraphGenerator {
         }
 
         for (iNode in inputNodes) {
-            val cNode = multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size < 2 }.random()
+            val cNode = multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size < 2 }
+                .random(RandomGenerator.sharedRandom)
             createPath(iNode, cNode)
         }
     }
@@ -121,7 +124,7 @@ class GraphGenerator2 : GraphGenerator {
                     this.createPath(fullMultiNode, outputNodes.removeFirst())
                     break
                 }
-                val cNode = nextMultiNodes.random()
+                val cNode = nextMultiNodes.random(RandomGenerator.sharedRandom)
                 this.createPath(fullMultiNode, cNode)
                 changed = true
             }
@@ -158,7 +161,7 @@ class GraphGenerator2 : GraphGenerator {
         val maxNumberOfOneNodes = multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size == 1 }.size
 
         val maxNumberOfNodes =
-            maxNumberOfEmptyNodes + maxNumberOfOneNodes - max(0, maxNumberOfOneNodes - maxNumberOfEmptyNodes - 1)
+            maxNumberOfEmptyNodes + maxNumberOfOneNodes - max(0, maxNumberOfOneNodes - (maxNumberOfEmptyNodes - 1))
 
         val maxNumberRecursiveRules = min(recursiveRules, maxNumberOfNodes)
 
@@ -179,9 +182,10 @@ class GraphGenerator2 : GraphGenerator {
         val recursiveSCCs = mutableListOf<MutableList<Node>>()
         val possibleNodes =
             (multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().isEmpty() }
-                    + multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size == 1 }.shuffled()
+                    + multiNodes.filter { dependencyGraph.inEdges[it].orEmpty().size == 1 }
+                .shuffled(RandomGenerator.sharedRandom)
                 .take(maxNumberOfOneNodes))
-                .shuffled().toMutableList()
+                .shuffled(RandomGenerator.sharedRandom).toMutableList()
 
         // Used to count the number of recRules
         var recRuleCount = 0
@@ -228,7 +232,7 @@ class GraphGenerator2 : GraphGenerator {
         // Note that there can be less available nodes, as the single recursions (single edge) influences the number of elements, but if combined reduces the number of possible recursions.
         // Usually we recommend that the number of recursive edges is smaller than the number of multi edges so that this has no impact.
         while (possibleNodes.isNotEmpty() && recRuleCount < maxNumberRecursiveRules) {
-            val selectedSCC = Random.nextInt(amountNumberRecursiveComponents)
+            val selectedSCC = RandomGenerator.sharedRandom.nextInt(amountNumberRecursiveComponents)
             val nodeToAdd = possibleNodes.removeFirst()
             recursiveSCCs[selectedSCC].add(nodeToAdd)
             recRuleCount++
@@ -248,8 +252,8 @@ class GraphGenerator2 : GraphGenerator {
         if (recRelevant.isNotEmpty()) {
             val removalList = mutableListOf<Node>()
             for (oneEdgeNode in oneEdgeNodes) {
-                if (Random.nextDouble() < percentageInsertInSCC) {
-                    recRelevant.random().add(oneEdgeNode)
+                if (RandomGenerator.sharedRandom.nextDouble() < percentageInsertInSCC) {
+                    recRelevant.random(RandomGenerator.sharedRandom).add(oneEdgeNode)
                     removalList.add(oneEdgeNode)
                 }
             }
@@ -260,8 +264,8 @@ class GraphGenerator2 : GraphGenerator {
         if (recRelevant.isNotEmpty()) {
             val removalList = mutableListOf<Node>()
             for (possibleNode in possibleNodes) {
-                if (Random.nextDouble() < percentageInsertInSCC) {
-                    recRelevant.random().add(possibleNode)
+                if (RandomGenerator.sharedRandom.nextDouble() < percentageInsertInSCC) {
+                    recRelevant.random(RandomGenerator.sharedRandom).add(possibleNode)
                     removalList.add(possibleNode)
                 }
             }
@@ -273,8 +277,8 @@ class GraphGenerator2 : GraphGenerator {
         nonRecSCCs.addAll(possibleNodes)
         nonRecSCCs.addAll(oneEdgeNodes)
 
-        this.recursiveSCCs = recursiveSCCs.shuffled()
-        this.nonRecursiveSCCs = nonRecSCCs.shuffled()
+        this.recursiveSCCs = recursiveSCCs.shuffled(RandomGenerator.sharedRandom)
+        this.nonRecursiveSCCs = nonRecSCCs.shuffled(RandomGenerator.sharedRandom)
     }
 
 
@@ -370,17 +374,17 @@ class GraphGenerator2 : GraphGenerator {
             allowedConnections[el] = 2
         }
 
-
         val metaNodesToProcess = metaGraph.nodes.toMutableList()
 
         val outputComponents = mutableListOf<Node>()
 
         loop@ while (metaNodesToProcess.isNotEmpty()) {
-            val nextNode = metaNodesToProcess.filter { isConnectedToInput[it] == true }.random()
+            val nextNode =
+                metaNodesToProcess.filter { isConnectedToInput[it] == true }.random(RandomGenerator.sharedRandom)
             metaNodesToProcess.remove(nextNode)
 
             // Add possible splits along the path
-            val numberOfNextComponents = Random.nextInt(1, 3)
+            val numberOfNextComponents = RandomGenerator.sharedRandom.nextInt(1, 3)
 
             for (x in 0 until numberOfNextComponents) {
                 // No self-loop allowed
@@ -398,7 +402,7 @@ class GraphGenerator2 : GraphGenerator {
                     }
                     continue@loop
                 }
-                val connectingNode = connectingNodes.random()
+                val connectingNode = connectingNodes.random(RandomGenerator.sharedRandom)
 
                 val edge = GenericEdge(from = nextNode, to = connectingNode)
                 metaGraph.addEdge(edge)
@@ -462,19 +466,15 @@ class GraphGenerator2 : GraphGenerator {
         while (connectedOutputComponents.size > 1) {
             val nodesWithMoreOutgoingEdges = metaGraph.nodes
                 .filter { metaGraph.outEdges[it].orEmpty().size > 1 }
-                .filter { n ->
+                .filter { targetNode ->
                     val targetList =
-                        metaGraph.outEdges[n]!!.map { e -> outgoingNodes[e.to].orEmpty() + e.to }.withIndex()
-                    targetList.any { a ->
-                        targetList.any { b ->
-                            a.index != b.index && b.value.intersect(a.value).isNotEmpty()
-                        }
-                    } || // merge with same input node
-                            targetList.any { a ->
-                                a.value.any {
-                                    ingoingNodes[it]!!.minus(a.value).minus(ingoingNodes[n]).isNotEmpty()
-                                }
-                            }
+                        metaGraph.outEdges[targetNode]!!.map { e -> outgoingNodes[e.to].orEmpty() + e.to }.withIndex()
+                    val reachableNodes = metaGraph.getConnectedNodes(targetNode)
+
+                    // Check whether the target node has an edge which removal is not splitting the connected component.
+                    metaGraph.outEdges[targetNode]!!.any {
+                        metaGraph.getConnectedNodes(targetNode, setOf(it)).size == reachableNodes.size
+                    }
                 }
 
 
@@ -483,7 +483,7 @@ class GraphGenerator2 : GraphGenerator {
                 throw RuntimeException("Cannot combine components, lets start debugging ...")
             }
 
-            val targetNode = nodesWithMoreOutgoingEdges.random()
+            val targetNode = nodesWithMoreOutgoingEdges.random(RandomGenerator.sharedRandom)
 
 
             if (connectedOutputComponents.none { outputNodes ->
@@ -497,7 +497,7 @@ class GraphGenerator2 : GraphGenerator {
             }
             val otherComponent = connectedOutputComponents.filter {
                 it != thisComponent
-            }.random()
+            }.random(RandomGenerator.sharedRandom)
             // Add otherComponent to this component
             thisComponent.addAll(otherComponent)
             // Remove other component
@@ -506,17 +506,22 @@ class GraphGenerator2 : GraphGenerator {
             // Remove edge
             val allEdges =
                 metaGraph.outEdges[targetNode].orEmpty().map { e -> Pair(e, outgoingNodes[e.to].orEmpty() + e.to) }
-            val possibleEdges =
-                allEdges.filter { a ->
-                    allEdges.any { b -> a.first != b.first && b.second.intersect(a.second).isNotEmpty() } ||
-                            a.second.any {
-                                ingoingNodes[it]!!.minus(a.second).minus(ingoingNodes[a.first.from]).isNotEmpty()
-                            }
-                }
-            val edge = possibleEdges.random().first
+
+            val reachableNodes = metaGraph.getConnectedNodes(targetNode)
+
+            /*Check whether the component is connected without the edge*/
+            val possibleEdges = allEdges.filter { possibleEdgeForRemoval ->
+                val reachableNodesAfterRemoval =
+                    metaGraph.getConnectedNodes(targetNode, setOf(possibleEdgeForRemoval.first))
+                reachableNodesAfterRemoval.size == reachableNodes.size
+            }
+
+            assert(possibleEdges.isNotEmpty())
+
+            val edge = possibleEdges.random(RandomGenerator.sharedRandom).first
             // Update removal
 
-            val nodeForConnection = otherComponent.random()
+            val nodeForConnection = otherComponent.random(RandomGenerator.sharedRandom)
             outputComponents.remove(nodeForConnection)
             val newEdge = GenericEdge(from = nodeForConnection, to = edge.to)
 
@@ -543,6 +548,9 @@ class GraphGenerator2 : GraphGenerator {
         // We are allowed to have at most n outputs
         // The other outputs have to be restructured.
         // (1) we remove edges from nodes with multiple outgoing edges and connect an output, in case no recursion is created
+        // thereby we are only allowed to remove an edge such that an existing component is not decoupled.
+        // This includes the case where after the connection the decoupling is resolved.
+
 
         while (outputComponents.size > outputNodes.size) {
             val nodesWithMoreOutgoingEdges = metaGraph.nodes
@@ -553,39 +561,53 @@ class GraphGenerator2 : GraphGenerator {
                 throw RuntimeException("Cannot combine outputs, no multi edges, lets start debugging ...")
             }
 
-            // We select those outputs as candidate where there exist a node with multiple outputs which target nodes
-            // (a) contain not the output node on the path (cycle)
-            // (b) contain no ingoing node of the output node as follow-up node (cycle)
-            val possibleOutputs = outputComponents.filter { outputNode ->
-                nodesWithMoreOutgoingEdges.any { multiOutputNode ->
-                    metaGraph.outEdges[multiOutputNode].orEmpty().any { edge ->
-                        (!outgoingNodes[edge.to]!!.contains(outputNode) && edge.to != outputNode) &&
-                                ingoingNodes[outputNode]!!.intersect(outgoingNodes[edge.to]!!).isEmpty()
-                    }
-                }
+            val potentialEdges = nodesWithMoreOutgoingEdges.flatMap { node ->
+                metaGraph.outEdges[node].orEmpty().map { Pair(it, metaGraph.getReachableNodes(it.to, setOf(it))) }
             }
 
-
-            if (possibleOutputs.isEmpty()) {
+            if (potentialEdges.isEmpty()) {
                 metaGraph.draw("metaGraph")
-                throw RuntimeException("Cannot combine outputs, lets start debugging ...")
+                throw RuntimeException("no potential edge found to remove...")
             }
 
-            val selectedOutput = possibleOutputs.random()
+            val outputNodeOrder = outputComponents.shuffled(RandomGenerator.sharedRandom)
 
-            val selectedNode = nodesWithMoreOutgoingEdges.filter { multiOutputNode ->
-                metaGraph.outEdges[multiOutputNode].orEmpty().any { edge ->
-                    (!outgoingNodes[edge.to]!!.contains(selectedOutput) && edge.to != selectedOutput) &&
-                            ingoingNodes[selectedOutput]!!.intersect(outgoingNodes[edge.to]!!).isEmpty()
-                }
-            }.random()
+            var selectedOutput: Node? = null
+            var selectedEdge: Edge? = null
 
-            // Select edge
-            val possibleEdges = metaGraph.outEdges[selectedNode].orEmpty().filter { edge ->
-                (!outgoingNodes[edge.to]!!.contains(selectedOutput) && edge.to != selectedOutput) &&
-                        ingoingNodes[selectedOutput]!!.intersect(outgoingNodes[edge.to]!!).isEmpty()
+            for (possibleOutputNode in outputNodeOrder) {
+                // Select possible edges for the node
+                // 1) After the edge is replaced, the output node has to reach a different node
+                // 2) The new graph has to be fully connected
+                // 3) The new graph has to be a DAG
+
+                val otherOutputNodeReachableEdgeList = potentialEdges.filter { edgeReachableNodes ->
+                    // Check for DAG, check for reaching a different output node
+                    edgeReachableNodes.second.none { it == possibleOutputNode } && edgeReachableNodes.second.any { it in outputComponents }
+                }.filter {
+                    // Check for fully connected, either the edge removal has no impact on the connectedness or the target is
+                    // not connected to the output node anymore
+                    val connectedNodesTarget = metaGraph.getConnectedNodes(it.first.to, setOf(it.first))
+                    connectedNodesTarget.size == metaGraph.nodes.size || !connectedNodesTarget.contains(
+                        possibleOutputNode
+                    )
+                }.map { it.first }
+
+
+                if (otherOutputNodeReachableEdgeList.isEmpty()) continue
+
+
+                selectedOutput = possibleOutputNode
+                selectedEdge = otherOutputNodeReachableEdgeList.random(RandomGenerator.sharedRandom)
+
+                break
             }
-            val selectedEdge = possibleEdges.random()
+
+            if (selectedOutput == null || selectedEdge == null) {
+                metaGraph.draw("metaGraph")
+                throw RuntimeException("No possible edge found for reducing outputs")
+            }
+
 
             // Update removal
             val newEdge = GenericEdge(from = selectedOutput, to = selectedEdge.to)
@@ -633,7 +655,11 @@ class GraphGenerator2 : GraphGenerator {
             assert(!x.value.contains(x.key))
         }
 
+        assert(metaGraph.isFullyConnected())
+
         this.computeSccGraphReduceOutputs(metaGraph, ingoingNodes, outgoingNodes, outputComponents)
+
+        assert(metaGraph.isFullyConnected())
 
         ingoingNodes.forEach { x ->
             assert(!x.value.contains(x.key))
@@ -653,7 +679,7 @@ class GraphGenerator2 : GraphGenerator {
 
         while (outputNodes.isNotEmpty() && metaGraph.nodes.isNotEmpty()) {
             val outMap = Node()
-            metaGraph.addEdge(GenericEdge(from = metaGraph.nodes.random(), to = outMap))
+            metaGraph.addEdge(GenericEdge(from = metaGraph.nodes.random(RandomGenerator.sharedRandom), to = outMap))
             nonRecursiveSCCsMap[outMap] = outputNodes.removeFirst()
         }
 
@@ -662,7 +688,7 @@ class GraphGenerator2 : GraphGenerator {
     /**
      * Helper function to connect the nodes in a single component
      */
-    private fun connectSingleComponent(multiNodes: Set<Node>, allNodes: MutableSet<Node>, numberOfRecursiveRules:Int) {
+    private fun connectSingleComponent(multiNodes: Set<Node>, allNodes: MutableSet<Node>, numberOfRecursiveRules: Int) {
         /**
          * For each node we create an arbitrary path to a different/same node
          * Following paths are allowed:
@@ -732,7 +758,7 @@ class GraphGenerator2 : GraphGenerator {
                 }
                 possibleNodes = otherNodes.toSet()
             }
-            val targetNode = possibleNodes.random()
+            val targetNode = possibleNodes.random(RandomGenerator.sharedRandom)
 
             val addedNodes = this.createPath(currentNode, targetNode)
             allNodes.addAll(addedNodes)
@@ -793,7 +819,7 @@ class GraphGenerator2 : GraphGenerator {
         }
 
         // Create a random order to connect groups
-        groups.shuffled()
+        groups.shuffled(RandomGenerator.sharedRandom)
         //For each open node, map to unique group index
         val groupToOpenNode = openNodes.associateBy { openNode ->
             groups.withIndex().first { it.value.contains(openNode) }.index
@@ -810,7 +836,7 @@ class GraphGenerator2 : GraphGenerator {
                     outgoingNodes[sourceNode].orEmpty().contains(sourceNode)
                 }
 
-                val randomSourceNode = randomSourceNodes.random()
+                val randomSourceNode = randomSourceNodes.random(RandomGenerator.sharedRandom)
 
                 // Select target node in next group, this is either the open node
                 // And if it is an SCC, then a node that allows to add an edge
@@ -822,7 +848,7 @@ class GraphGenerator2 : GraphGenerator {
                     if (possibleTargetNodes.isEmpty()) {
                         dependencyGraph.draw("dgDebug")
                     }
-                    possibleTargetNodes.random()
+                    possibleTargetNodes.random(RandomGenerator.sharedRandom)
                 }
 
                 // Add path to dependency graph
@@ -840,7 +866,7 @@ class GraphGenerator2 : GraphGenerator {
         val missingInputs = multiNodes.filter { targetNode -> dependencyGraph.inEdges[targetNode].orEmpty().size < 2 }
 
         for (targetNode in missingInputs) {
-            val sourceNode = allNodes.random()
+            val sourceNode = allNodes.random(RandomGenerator.sharedRandom)
             val addedNodes = this.createPath(sourceNode, targetNode)
             allNodes.addAll(addedNodes)
             recCount++
@@ -851,7 +877,7 @@ class GraphGenerator2 : GraphGenerator {
     /**
      * Creates the final dependency graph
      */
-    private fun createGraph(numberOfRecursiveRules:Int) {
+    private fun createGraph(numberOfRecursiveRules: Int) {
         // Stores whether node of meta graph has been computed
         val nodeHandledInfo = this.metaGraph.nodes.associateWith { false }.toMutableMap()
 
@@ -880,7 +906,7 @@ class GraphGenerator2 : GraphGenerator {
 
             // Connect all outgoing edges to next node and set handled to true
             for (outEdge in this.metaGraph.outEdges[component].orEmpty()) {
-                val fromNode = allNodes.random()
+                val fromNode = allNodes.random(RandomGenerator.sharedRandom)
                 val isTargetRecursive = this.recursiveSCCMap.contains(outEdge.to)
                 val targetNodes =
                     if (isTargetRecursive) this.recursiveSCCMap[outEdge.to]!! else listOf(this.nonRecursiveSCCMap[outEdge.to]!!)
@@ -896,8 +922,8 @@ class GraphGenerator2 : GraphGenerator {
                     throw RuntimeException("some unexpected error, lets start debugging ...")
                 }
 
-                val toNode = selectableNodes.random()
-                this.createPath(startNode = fromNode, endNode= toNode)
+                val toNode = selectableNodes.random(RandomGenerator.sharedRandom)
+                this.createPath(startNode = fromNode, endNode = toNode)
             }
 
             nodeHandledInfo[component] = true
@@ -905,8 +931,9 @@ class GraphGenerator2 : GraphGenerator {
         }
 
         // Connect remaining output nodes in case no meta node existed for linking in previous component
-        while(outputNodes.isNotEmpty()) {
-            val node = dependencyGraph.nodes.filter { dependencyGraph.outEdges[it].orEmpty().isNotEmpty() }.random()
+        while (outputNodes.isNotEmpty()) {
+            val node = dependencyGraph.nodes.filter { dependencyGraph.outEdges[it].orEmpty().isNotEmpty() }
+                .random(RandomGenerator.sharedRandom)
             this.createPath(node, outputNodes.removeFirst())
         }
 
@@ -926,8 +953,8 @@ class GraphGenerator2 : GraphGenerator {
         val multiEdgeInnerNodes = max(numberOfMultiEdgeRules, numberOfInputNodes - 1 + numberOfRecursiveRules)
         val singleEdgeInnerNodes = max(0, innerNodes - multiEdgeInnerNodes)
 
-        if (multiEdgeInnerNodes > totalNodes) {
-            throw RuntimeException("invalid configuration, more multi nodes required then possible total nodes")
+        if (multiEdgeInnerNodes > innerNodes) {
+            throw RuntimeException("invalid configuration, more multi nodes required then possible inner nodes")
         }
         val paths = multiEdgeInnerNodes * 2 + numberOfOutputNodes
 

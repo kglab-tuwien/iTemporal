@@ -183,7 +183,7 @@ object DataGenerator : DataGeneration {
 
                 // Limit to maxData so that data generation runs fast. The max parameter can be chosen
                 // Discuss: may limit to difference?
-                node.data = node.data.shuffled().take(maxData)
+                node.data = node.data.shuffled(RandomGenerator.sharedRandom).take(maxData)
 
                 // 2. If new data is not empty, then apply data forwarding
                 if (node.data.isNotEmpty()) {

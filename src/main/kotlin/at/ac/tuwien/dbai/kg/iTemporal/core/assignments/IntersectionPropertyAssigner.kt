@@ -4,9 +4,9 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.ArityPropertyAssignment
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.Node
 import at.ac.tuwien.dbai.kg.iTemporal.core.edges.IntersectionEdge
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.random.Random
 
 /**
  * Assigns the number of join terms and number of required non-join terms to the nodes/edges.
@@ -105,7 +105,7 @@ object IntersectionPropertyAssigner : ArityPropertyAssignment {
         val intersectionNodes = nodes.filter {
             dependencyGraph.inEdges[it].orEmpty()
                 .any { edge -> edge is IntersectionEdge && (edge.overlappingTerms == -1 || edge.nonOverlappingTerms == -1) }
-        }.shuffled().sortedWith(compareBy({ !(it.maxArity-it.minArity==0) }, {-it.minArity}))
+        }.shuffled(RandomGenerator.sharedRandom).sortedWith(compareBy({ !(it.maxArity-it.minArity==0) }, {-it.minArity}))
 
         if (intersectionNodes.isEmpty()) {
             return false
@@ -142,7 +142,7 @@ object IntersectionPropertyAssigner : ArityPropertyAssignment {
 
         val maxNumberJoinTerms = min(minMaxArity - diff1, nodeArity)
 
-        val numberJoinTerms = Random.nextInt(maxNumberJoinTerms + 1)
+        val numberJoinTerms = RandomGenerator.sharedRandom.nextInt(maxNumberJoinTerms + 1)
 
         /**
          * Example1: NodeArity: 6, maxArity: 3 for both, then minMaxArity=maxMaxArity=3, diff1=3 and maxNumberJoinTerms=0
@@ -169,7 +169,7 @@ object IntersectionPropertyAssigner : ArityPropertyAssignment {
 
         assert(minCriteria <= maxCriteria)
 
-        val noJT1 = max(minCriteria, Random.nextInt(maxCriteria + 1))
+        val noJT1 = max(minCriteria, RandomGenerator.sharedRandom.nextInt(maxCriteria + 1))
         val noJT2 = numberNoJoinTerms - noJT1
 
 

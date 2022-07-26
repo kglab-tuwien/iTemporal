@@ -4,7 +4,7 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.OtherPropertyAssignment
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.TriangleUnit
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.edges.TriangleUpEdge
-import kotlin.random.Random
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 
 /**
  * This job assigns the triangle unit property.
@@ -20,7 +20,7 @@ object TriangleUnitAssigner : OtherPropertyAssignment {
         }
 
         for (triangleUpEdge in triangleUpEdges) {
-            val randomSelection = Random.nextInt(0, 4)
+            val randomSelection = RandomGenerator.sharedRandom.nextInt(0, 4)
             triangleUpEdge.unit = TriangleUnit.values()[randomSelection]
         }
 

@@ -4,6 +4,7 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.Edge
 import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.OtherPropertyAssignment
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
 import at.ac.tuwien.dbai.kg.iTemporal.core.edges.IntersectionEdge
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 
 /**
  * Calls the assignment of the term order for a given edge.
@@ -49,7 +50,7 @@ object TermOrderPropertyAssigner : OtherPropertyAssignment {
                     continue
                 }
 
-                val requiredNodes = Array(node.minArity) { index -> index }.toList()//.shuffled()
+                val requiredNodes = Array(node.minArity) { index -> index }.toList()//.shuffled(RandomGenerator.sharedRandom)
 
                 val overlappingIndices = requiredNodes.take(edge1.overlappingTerms)
                 val edge1Indices = requiredNodes.drop(edge1.overlappingTerms).take(edge1.nonOverlappingTerms)
@@ -59,13 +60,13 @@ object TermOrderPropertyAssigner : OtherPropertyAssignment {
                 edge1.termOrder =
                     (overlappingIndices + edge1Indices + (Array(edge1.from.minArity - edge1.overlappingTerms - edge1.nonOverlappingTerms) { index -> -1 }.toList()))
                 if (edge1.from.sccId != edge1.to.sccId) {
-                    edge1.termOrder = edge1.termOrder.shuffled()
+                    edge1.termOrder = edge1.termOrder.shuffled(RandomGenerator.sharedRandom)
                 }
 
                 edge2.termOrder =
                     (overlappingIndices + edge2Indices + (Array(edge2.from.minArity - edge2.overlappingTerms - edge2.nonOverlappingTerms) { index -> -1 }.toList()))
                 if (edge2.from.sccId != edge2.to.sccId) {
-                    edge2.termOrder = edge2.termOrder.shuffled()
+                    edge2.termOrder = edge2.termOrder.shuffled(RandomGenerator.sharedRandom)
                 }
 
             } else {

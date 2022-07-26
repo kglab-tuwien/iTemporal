@@ -20,7 +20,7 @@ object AggregationPropertyAssigner : ArityPropertyAssignment {
     override fun run(nodes: List<Node>, dependencyGraph: DependencyGraph): Boolean {
 
         // Unhandled Aggregation Nodes
-        val aggregationNodes = nodes.filter { dependencyGraph.inEdges[it].orEmpty().any { edge -> edge is ITAEdge && (edge.numberOfGroupingTerms == -1 || edge.numberOfContributors == -1) } }.shuffled()
+        val aggregationNodes = nodes.filter { dependencyGraph.inEdges[it].orEmpty().any { edge -> edge is ITAEdge && (edge.numberOfGroupingTerms == -1 || edge.numberOfContributors == -1) } }.shuffled(RandomGenerator.sharedRandom)
 
         if (aggregationNodes.isEmpty()) {
             return false
@@ -67,10 +67,10 @@ object AggregationPropertyAssigner : ArityPropertyAssignment {
 
         // Update nodes and edges
         aggregationNode.minArity = groupBys+1
-        aggregationNode.maxArity = groupBys+1
+        aggregationNode.maxArity =  aggregationNode.minArity
 
-        e1.numberOfGroupingTerms = groupBys
-        e1.numberOfContributors = contributors
+        e1.numberOfGroupingTerms = Math.max(groupBys, 0)
+        e1.numberOfContributors = Math.max(contributors, 0)
 
         e1.from.minArity = groupBys+contributors+1+others
         e1.from.maxArity = e1.from.minArity

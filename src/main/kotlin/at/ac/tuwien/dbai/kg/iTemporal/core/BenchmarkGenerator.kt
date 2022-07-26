@@ -114,7 +114,7 @@ class BenchmarkGenerator() {
             dg = dataGenerator.run(dg, false)
         }
 
-        return dg.getData()
+        return dg.getData(true)
     }
 
     fun run(dependencyGraph: DependencyGraph):DependencyGraph {

@@ -5,6 +5,7 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.BenchmarkGenerator
 import at.ac.tuwien.dbai.kg.iTemporal.core.Registry
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.Node
+import at.ac.tuwien.dbai.kg.iTemporal.graphGenerator.GraphGenerator2
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.edges.BoxMinusEdge
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.edges.DiamondMinusEdge
 import org.junit.jupiter.api.Assertions
@@ -13,6 +14,16 @@ import java.io.File
 
 internal class GeneralTest {
 
+    @Test
+    fun testFCGraphGeneration() {
+        // Some tests for fully connected graph generation
+
+        RandomGenerator.setSeed(3724)
+        val graph = GraphGenerator2().generate()
+        Assertions.assertTrue(graph.isFullyConnected())
+
+
+    }
 
 
     @Test
@@ -54,8 +65,6 @@ internal class GeneralTest {
     }
 
 
-
-
     @Test
     fun runRecursiveTemporalExample() {
         // Try to produce error
@@ -66,17 +75,15 @@ internal class GeneralTest {
             Registry.properties.unionInclusionPercentage = 1.0
 
             val dg =
-                //DependencyGraph.parseFromJson(File("src/test/resources/examples/recursive_temporal_intersection.json"))
+            //DependencyGraph.parseFromJson(File("src/test/resources/examples/recursive_temporal_intersection.json"))
                 //DependencyGraph.parseFromJson(File("src/test/resources/examples/recursive_temporal.json"))
-            DependencyGraph.parseFromJson(File("src/test/resources/examples/recursive_temporal_aggregation.json"))
+                DependencyGraph.parseFromJson(File("src/test/resources/examples/recursive_temporal_aggregation.json"))
 
             val generator = BenchmarkGenerator()
             val dgAfter = generator.run(dg)
 
         }
     }
-
-
 
 
     @Test

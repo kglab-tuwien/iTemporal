@@ -63,7 +63,46 @@ open class DependencyGraph(
         return result
     }
 
-    fun getData():Map<String, String> {
+    fun getReachableNodes(startNode: Node, ignoreEdges: Set<Edge> = emptySet()): Set<Node> {
+        val visited = mutableSetOf<Node>()
+        val queue = mutableListOf<Node>(startNode)
+
+        while(queue.isNotEmpty()) {
+            val node = queue.removeFirst()
+            if (visited.contains(node)) continue
+            visited.add(node)
+
+            queue.addAll(this.outEdges[node]?.filter { !ignoreEdges.contains(it) }?.map { it.to } ?: listOf())
+        }
+
+        return visited
+    }
+
+    fun getConnectedNodes(startNode: Node, ignoreEdges: Set<Edge> = emptySet()): Set<Node> {
+        val visited = mutableSetOf<Node>()
+        val queue = mutableListOf<Node>(startNode)
+
+        while(queue.isNotEmpty()) {
+            val node = queue.removeFirst()
+            if (visited.contains(node)) continue
+            visited.add(node)
+
+            queue.addAll(this.outEdges[node]?.filter { !ignoreEdges.contains(it) }?.map { it.to } ?: listOf())
+            queue.addAll(this.inEdges[node]?.filter { !ignoreEdges.contains(it) }?.map { it.from } ?: listOf())
+        }
+
+        return visited
+    }
+
+    fun isFullyConnected():Boolean {
+        if (this.nodes.isEmpty()) {
+            return true
+        }
+        val visited = this.getConnectedNodes(this.nodes.first())
+        return visited.size == this.nodes.size
+    }
+
+    fun getData(numericMode: Boolean):Map<String, String> {
         val returnData = mutableMapOf<String, String>()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val inputNodes = nodes.filter { it.type == NodeType.Input }
@@ -81,11 +120,21 @@ open class DependencyGraph(
                 data = data.sortedBy { it[node.minArity] }
             }
 
-            val outputData = headerText + data.joinToString("\n") { it ->
-                val newList =
-                    it.take(node.minArity) + it.drop(node.minArity)
-                        .map { "\"${dateFormat.format(Date(it.toLong()))}\"" }
-                newList.joinToString(",")
+            val outputData = if (numericMode) {
+                val minDate = inputNodes.map { node-> node.oldData.map{ data -> data[node.minArity]}}.flatten().minOrNull()
+                headerText + data.joinToString("\n") { it ->
+                    val newList =
+                        it.take(node.minArity) + it.drop(node.minArity)
+                            .map { (it-minDate!!)}
+                    newList.joinToString(",")
+                }
+            } else {
+                headerText + data.joinToString("\n") { it ->
+                    val newList =
+                        it.take(node.minArity) + it.drop(node.minArity)
+                            .map { "\"${dateFormat.format(Date(it.toLong()))}\"" }
+                    newList.joinToString(",")
+                }
             }
             returnData[key] = outputData
         }

@@ -4,6 +4,7 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.EdgeFactory
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.Node
 import at.ac.tuwien.dbai.kg.iTemporal.core.edges.GenericEdge
 import at.ac.tuwien.dbai.kg.iTemporal.util.NameGenerator
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 
@@ -103,7 +104,7 @@ interface Edge {
             // Calculate random order of input properties.
             val data = Array(fromArity) { index -> index }.toList()
             if (shuffle && this.termOrderShuffleAllowed) {
-                this.termOrder = data.shuffled()
+                this.termOrder = data.shuffled(RandomGenerator.sharedRandom)
             } else {
                 this.termOrder = data
             }

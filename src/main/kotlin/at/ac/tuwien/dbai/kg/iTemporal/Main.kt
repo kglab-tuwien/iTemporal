@@ -1,6 +1,6 @@
 package at.ac.tuwien.dbai.kg.iTemporal
 
-import at.ac.tuwien.dbai.kg.iTemporal.ruleGenerators.datalogGenerator.DatalogGenerator
+import at.ac.tuwien.dbai.kg.iTemporal.ruleGenerators.datalogGenerator.VadalogGenerator
 import at.ac.tuwien.dbai.kg.iTemporal.aggregation.assignments.*
 import at.ac.tuwien.dbai.kg.iTemporal.aggregation.edges.GenericAggregationEdge
 import at.ac.tuwien.dbai.kg.iTemporal.aggregation.edges.ITAEdge
@@ -16,12 +16,14 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.assignments.*
 import at.ac.tuwien.dbai.kg.iTemporal.core.edges.*
 import at.ac.tuwien.dbai.kg.iTemporal.core.jobs.*
 import at.ac.tuwien.dbai.kg.iTemporal.graphGenerator.GraphGenerator2
+import at.ac.tuwien.dbai.kg.iTemporal.ruleGenerators.datalogGenerator.MeteorGenerator
 import at.ac.tuwien.dbai.kg.iTemporal.ruleGenerators.postgresdbGenerator.PostgresSQLGenerator
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.assignments.*
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.edges.*
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.jobs.TemporalIntervalAssigner
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.jobs.TemporalNormalization
 import at.ac.tuwien.dbai.kg.iTemporal.temporal.jobs.TriangleUnitAssigner
+import org.springframework.boot.runApplication
 import java.io.File
 
 object Main {
@@ -128,11 +130,12 @@ object Main {
         initRegistryCoreModule()
         initRegistryTemporalModule()
         initRegistryAggregationModule()
-        Registry.addRuleGenerator(DatalogGenerator)
+        Registry.addRuleGenerator(VadalogGenerator)
+        Registry.addRuleGenerator(MeteorGenerator)
         Registry.addRuleGenerator(PostgresSQLGenerator)
     }
 
-    @JvmStatic
+    /*@JvmStatic
     fun main(args: Array<String>) {
         Main.initRegistry()
         // Set your desired properties here
@@ -140,6 +143,11 @@ object Main {
         Registry.properties.path = File("out/GENERATION_NAME")
         val benchmarkGenerator = BenchmarkGenerator()
         benchmarkGenerator.run()
+    }*/
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        runApplication<Demo>(*args)
     }
 }
 

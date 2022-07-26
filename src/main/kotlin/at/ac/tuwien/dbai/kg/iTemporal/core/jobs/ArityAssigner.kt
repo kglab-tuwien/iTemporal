@@ -105,7 +105,7 @@ object ArityAssigner {
                 node.maxArity = Int.MAX_VALUE
             }
             if (node.minArity < 0) {
-                node.minArity = 0
+                node.minArity = -1
             }
         }
 
@@ -115,8 +115,8 @@ object ArityAssigner {
             // Init node arity of SCC
             for (node in nodes) {
                 if (node.type == NodeType.Output) {
-                    if (node.minArity == 0) {
-                        node.minArity = RandomGenerator.getNextArity(
+                    if (node.minArity == -1) {
+                        node.minArity = RandomGenerator.getNextArityWith0(
                             Registry.properties.averageOutputArity,
                             Registry.properties.varianceOutputArity
                         )

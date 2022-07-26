@@ -4,7 +4,7 @@ import at.ac.tuwien.dbai.kg.iTemporal.aggregation.AggregationType
 import at.ac.tuwien.dbai.kg.iTemporal.aggregation.edges.ITAEdge
 import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.OtherPropertyAssignment
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
-import kotlin.random.Random
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 
 /**
  * Assigns an aggregation type to each aggregation edge, e.g. min, max, sum, count
@@ -22,7 +22,7 @@ object AggregationTypeAssigner : OtherPropertyAssignment {
         }
 
         for (aggregationEdge in aggregationEdges) {
-            val randomSelection = Random.nextInt(0, 4)
+            val randomSelection = RandomGenerator.sharedRandom.nextInt(0, 4)
             aggregationEdge.aggregationType = AggregationType.values()[randomSelection]
         }
 

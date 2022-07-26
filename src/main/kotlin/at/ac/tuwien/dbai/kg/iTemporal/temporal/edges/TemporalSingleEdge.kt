@@ -3,7 +3,6 @@ package at.ac.tuwien.dbai.kg.iTemporal.temporal.edges
 import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 import at.ac.tuwien.dbai.kg.iTemporal.core.Registry
 import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.SingleEdge
-import kotlin.random.Random
 
 interface TemporalSingleEdge : SingleEdge, TemporalEdge {
 
@@ -19,7 +18,7 @@ interface TemporalSingleEdge : SingleEdge, TemporalEdge {
 
         for(entry in to.data) {
             // Include edge?
-            val isIncluded = Random.nextDouble()
+            val isIncluded = RandomGenerator.sharedRandom.nextDouble()
             if(isCyclic && isIncluded > Registry.properties.temporalInclusionPercentage) {
                 continue
             }

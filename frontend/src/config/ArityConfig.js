@@ -13,7 +13,7 @@ export default function ArityConfig() {
             <Slider
                 id="averageOutputArity"
                 label={"Average Output arity"}
-                min={1}
+                min={0}
                 max={5}
                 step={1}
                 values={[properties.averageOutputArity]}

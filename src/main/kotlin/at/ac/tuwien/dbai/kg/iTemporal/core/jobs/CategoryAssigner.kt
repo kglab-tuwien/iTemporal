@@ -8,6 +8,7 @@ import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.SingleEdge
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
 import at.ac.tuwien.dbai.kg.iTemporal.core.edges.GenericMultiEdge
 import at.ac.tuwien.dbai.kg.iTemporal.core.edges.GenericSingleEdge
+import at.ac.tuwien.dbai.kg.iTemporal.util.RandomGenerator
 
 /**
  * This job handles the assignment of the category edges to the generic edges.
@@ -35,8 +36,8 @@ object CategoryAssigner {
             }
         }
 
-        singleEdgeGenerationOrder.shuffle()
-        multiEdgeGenerationOrder.shuffle()
+        singleEdgeGenerationOrder.shuffle(RandomGenerator.sharedRandom)
+        multiEdgeGenerationOrder.shuffle(RandomGenerator.sharedRandom)
 
         val singleEdges = dependencyGraph.inEdges.values.flatten().filterIsInstance<GenericSingleEdge>()
         val multiNodes = dependencyGraph.inEdges.values.flatten().filterIsInstance<GenericMultiEdge>().map { it.to }.distinct()
