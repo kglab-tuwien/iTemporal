@@ -61,6 +61,9 @@ object RandomGenerator {
 
         val dataAmount = max(0,(sharedRandomJava.nextGaussian() * sqrt(minimumOutputVariance) + minimumOutputMean).roundToInt())
 
+        val minimumOutputMeanIntervals = Registry.properties.averageAmountOfGeneratedOutputIntervals
+        val minimumOutputVarianceIntervals = Registry.properties.varianceAmountOfGeneratedOutputIntervals
+
         for (i in 0 until dataAmount) {
             val entry = mutableListOf<Double>()
 
@@ -68,22 +71,38 @@ object RandomGenerator {
                 entry.add(generateTerm(Registry.properties.cardinalityTermDomain))
             }
 
-            // Add time intervals (rounded to second ... divided by 1000 to get seconds rounded and then multiplied again to get milliseconds)
-            val intervalStart = sharedRandom.nextLong(Registry.properties.outputTimestampStart,Registry.properties.outputTimestampEnd)/1000*1000
-            val minimalIntervalSize = max(0.0,MetaIntervalAssigner.getIntervalInformations()[node]!!.intervalOffset.getDuration())
-            val intervalEnd:Double = if(Registry.properties.generateTimePoints) {
-                // We work externally with dates
-                intervalStart + minimalIntervalSize + 1
-            } else {
-                // At least the minimal interval size
-                max(intervalStart + 1.0 + Registry.properties.temporalFactor * getNextDoubleWithPrecision(Registry.properties.averageOutputIntervalDuration, Registry.properties.varianceOutputIntervalDuration), intervalStart + minimalIntervalSize + 1)
+            val intervalAmount = max(0,(sharedRandomJava.nextGaussian() * sqrt(minimumOutputVarianceIntervals) + minimumOutputMeanIntervals).roundToInt())
+
+            for (j in 0 until intervalAmount) {
+                // Add time intervals (rounded to second ... divided by 1000 to get seconds rounded and then multiplied again to get milliseconds)
+                val intervalStart = sharedRandom.nextLong(
+                    Registry.properties.outputTimestampStart,
+                    Registry.properties.outputTimestampEnd
+                ) / 1000 * 1000
+                val minimalIntervalSize =
+                    max(0.0, MetaIntervalAssigner.getIntervalInformations()[node]!!.intervalOffset.getDuration())
+                val intervalEnd: Double = if (Registry.properties.generateTimePoints) {
+                    // We work externally with dates
+                    intervalStart + minimalIntervalSize + 1
+                } else {
+                    // At least the minimal interval size
+                    max(
+                        intervalStart + 1.0 + Registry.properties.temporalFactor * getNextDoubleWithPrecision(
+                            Registry.properties.averageOutputIntervalDuration,
+                            Registry.properties.varianceOutputIntervalDuration
+                        ), intervalStart + minimalIntervalSize + 1
+                    )
+                }
+
+                // Copy entry and add intervals
+                val insertEntry = mutableListOf<Double>()
+                insertEntry.addAll(entry)
+                insertEntry.add(intervalStart.toDouble())
+                insertEntry.add(intervalEnd)
+                assert(intervalStart < intervalEnd)
+
+                entries.add(insertEntry)
             }
-
-            entry.add(intervalStart.toDouble())
-            entry.add(intervalEnd)
-            assert(intervalStart<intervalEnd)
-
-            entries.add(entry)
         }
 
         return entries

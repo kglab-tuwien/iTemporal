@@ -186,6 +186,8 @@ const initState = {
         cardinalityTermDomain: 1000,
         averageAmountOfGeneratedOutputs: 10,
         varianceAmountOfGeneratedOutputs: 3.0,
+        averageAmountOfGeneratedOutputIntervals: 1,
+        varianceAmountOfGeneratedOutputIntervals: 0.0,
         outputTimestampStart: (new Date("2020-01-01")).getTime(),
         outputTimestampEnd: (new Date("2022-01-01")).getTime(),
         averageOutputIntervalDuration: 10.0,

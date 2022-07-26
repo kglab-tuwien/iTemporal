@@ -67,8 +67,10 @@ import java.text.SimpleDateFormat
  * @property outputTimestampEnd range of intervals where seeding data is produced
  * @property averageOutputIntervalDuration duration of the interval length
  * @property varianceOutputIntervalDuration
- * @property averageAmountOfGeneratedOutputs
- * @property varianceAmountOfGeneratedOutputs
+ * @property averageAmountOfGeneratedOutputs defines the avg number of terms (without intervals)
+ * @property varianceAmountOfGeneratedOutputs defines the variance for number of terms (without intervals)
+ * @property averageAmountOfGeneratedOutputIntervals  defines the avg number of intervals for a term
+ * @property varianceAmountOfGeneratedOutputIntervals defines the variance of intervals of a term
  *
  * Data (Aggregation nodes):
  * @property averageAggregationSelectivity
@@ -158,6 +160,8 @@ data class Properties(
     var cardinalityTermDomain:Long=1000,
     var averageAmountOfGeneratedOutputs: Int = 10,
     var varianceAmountOfGeneratedOutputs: Double = 3.0,
+    var averageAmountOfGeneratedOutputIntervals: Int = 1,
+    var varianceAmountOfGeneratedOutputIntervals: Double = 0.0,
     var maxInnerNodeDataFactor: Int = 10,
     var outputTimestampStart:Long = (SimpleDateFormat("yyyy-mm-dd")).parse("2020-01-01").time,
     var outputTimestampEnd:Long = (SimpleDateFormat("yyyy-mm-dd")).parse("2022-01-01").time,

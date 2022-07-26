@@ -53,6 +53,24 @@ export default function DataConfig() {
                     values={[properties.varianceAmountOfGeneratedOutputs]}
                     onChange={(values) => dispatch(setProperty({property: "varianceAmountOfGeneratedOutputs", value: values[0]}))}
             />
+
+            <Slider id="averageAmountOfGeneratedOutputIntervals"
+                    label={"Average Number of Seeding Output Intervals"}
+                    min={1}
+                    max={100}
+                    step={1}
+                    values={[properties.averageAmountOfGeneratedOutputIntervals]}
+                    onChange={(values) => dispatch(setProperty({property: "averageAmountOfGeneratedOutputIntervals", value: values[0]}))}
+            />
+            <Slider id="varianceAmountOfGeneratedOutputIntervals"
+                    label={"Variance Number of Seeing Output Intervals"}
+                    min={0}
+                    max={10}
+                    step={0.1}
+                    values={[properties.varianceAmountOfGeneratedOutputIntervals]}
+                    onChange={(values) => dispatch(setProperty({property: "varianceAmountOfGeneratedOutputIntervals", value: values[0]}))}
+            />
+
             <Slider id="outputIntervalStartRange"
                     label={"Start Range Output Interval"}
                     min={1577836800}
