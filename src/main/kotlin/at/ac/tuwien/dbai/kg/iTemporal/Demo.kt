@@ -46,14 +46,21 @@ data class Message(
     val dependencyGraph: String?
 )
 
+data class GenericResponse(
+    val graph: String,
+    val properties: Properties,
+)
+
 data class RuleResponse(
     val graph: String,
     val rules: Map<String,String>,
+    val properties: Properties,
 )
 
 data class DataResponse(
     val graph: String,
     val data: Map<String,String>,
+    val properties: Properties,
 )
 
 @RestController
@@ -65,13 +72,16 @@ class BenchmarkGeneratorResource {
 
 
     @PostMapping
-    fun runGenerator(@RequestBody message: Message):String {
+    fun runGenerator(@RequestBody message: Message):GenericResponse {
         Main.initRegistry()
         Registry.properties = message.properties
         val benchmarkGenerator = BenchmarkGenerator()
         val dg = if(message.dependencyGraph != null) DependencyGraph.parseFromJson(message.dependencyGraph) else benchmarkGenerator.generatePlainGraph()
         val finalGraph = benchmarkGenerator.runGraphTransformation(message.step, dg)
-        return finalGraph.toJson()
+        return GenericResponse(
+            graph=finalGraph.toJson(),
+            properties = Registry.properties
+        )
     }
 
 
@@ -87,7 +97,8 @@ class BenchmarkGeneratorResource {
         val finalGraph = benchmarkGenerator.runGraphTransformation(message.step, dg)
         return RuleResponse(
             graph=finalGraph.toJson(),
-            rules =benchmarkGenerator.runRuleGeneration(finalGraph)
+            rules =benchmarkGenerator.runRuleGeneration(finalGraph),
+            properties = Registry.properties
         )
     }
 
@@ -103,7 +114,8 @@ class BenchmarkGeneratorResource {
         val finalGraph = benchmarkGenerator.runGraphTransformation(message.step, dg)
         return DataResponse(
             graph=finalGraph.toJson(),
-            data =benchmarkGenerator.runDataGeneration(finalGraph)
+            data =benchmarkGenerator.runDataGeneration(finalGraph),
+            properties = Registry.properties
         )
     }
 

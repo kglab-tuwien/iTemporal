@@ -27,6 +27,7 @@ interface Edge {
             val isCyclic = if (data.has("isCyclic")) data.get("isCyclic").asBoolean else false
             val order = if (data.has("termOrder")) data.getAsJsonArray("termOrder").map { it.asInt } else emptyList()
             val uniqueId = if (data.has("uniqueId")) data.get("uniqueId").asString else NameGenerator.getUniqueName()
+            val existentialCount = if (data.has("existentialCount")) data.get("existentialCount").asInt else 0
             val termOrderShuffleAllowed =
                 if (data.has("termOrderShuffleAllowed")) data.get("termOrderShuffleAllowed").asBoolean else true
             val termOrderReference =
@@ -37,6 +38,7 @@ interface Edge {
             edge.uniqueId = uniqueId
             edge.termOrderShuffleAllowed = termOrderShuffleAllowed
             edge.termOrderReference = termOrderReference
+            edge.existentialCount = existentialCount
             return edge
         }
     }
@@ -48,11 +50,12 @@ interface Edge {
     var termOrder: List<Int>
     var termOrderShuffleAllowed: Boolean
     var termOrderReference: String?
+    var existentialCount: Int
 
     fun backwardPropagateData()
     fun forwardPropagateData()
 
-    fun getNumberOfAdditionalTerms(): Int = 0
+    fun getNumberOfAdditionalTerms(): Int = existentialCount
 
 
     /**
@@ -80,6 +83,7 @@ interface Edge {
         val jsonElement = JsonArray()
         termOrder.forEach { jsonElement.add(it) }
         data.add("termOrder", jsonElement)
+        data.addProperty("existentialCount", this.existentialCount)
         return data
     }
 
@@ -108,6 +112,7 @@ interface Edge {
             } else {
                 this.termOrder = data
             }
+            this.termOrder = this.termOrder.map { if (it < this.to.minArity) it else -1 }
         }
     }
 

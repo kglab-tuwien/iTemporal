@@ -149,7 +149,7 @@ data class Properties(
     var varianceNumberOfOverlappingJoinTerms: Double = 1.0,
 
     // Temporal settings
-    var temporalFactor: Double = 1000.0, // seconds = 1000
+    var temporalFactor: Double = 1.0, // seconds = 1000
     var averageNumberOfTemporalUnitsT1: Double = 1.0,
     var varianceNumberOfTemporalUnitsT1: Double = 1.0,
     var averageNumberOfTemporalUnitsT2: Double = 3.0,
@@ -167,6 +167,10 @@ data class Properties(
     var outputTimestampEnd:Long = (SimpleDateFormat("yyyy-mm-dd")).parse("2022-01-01").time,
     var averageOutputIntervalDuration:Double = 10.0,
     var varianceOutputIntervalDuration:Double = 1.0,
+    var averageStartExtensionIntervalDuration:Double = 10.0,
+    var varianceStartExtensionIntervalDuration:Double = 20.0,
+    var averageEndExtensionIntervalDuration:Double = 10.0,
+    var varianceEndExtensionIntervalDuration:Double = 20.0,
     var averageAggregationSelectivity: Double = 0.2,
     var varianceAggregationSelectivity: Double = 0.02,
     var unionInclusionPercentage: Double = 0.6,
@@ -185,4 +189,11 @@ data class Properties(
     var outputCsvHeader:Boolean = false,
     var outputQuestDB: Boolean = false,
 
+    var lastNameID:Int = 0,
+
+    var weaklyAcyclicProgram:Boolean = false,
+    var averageExistentials:Int = 1,
+    var varianceExistentials:Double = 0.0,
+    var averageExistentialsChainLength:Int = 5,
+    var varianceExistentialsChainLength:Double = 1.0,
 )

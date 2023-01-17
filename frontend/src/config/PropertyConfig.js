@@ -11,15 +11,15 @@ export default function PropertyConfig() {
     return (
         <>
             <h2 className={"text-lg leading-6 font-medium text-gray-900 mb-2"}>Properties</h2>
-            <Slider
+            {/*<Slider
                 id="temporalFactor"
                 label={"Interval Multiplier (1000=s)"}
-                min={1000}
+                min={1}
                 max={1000000}
-                step={1000}
+                step={1}
                 values={[properties.temporalFactor]}
                 onChange={(values) => dispatch(setProperty({property: "temporalFactor", value: values[0]}))}
-            />
+            />*/}
             <Slider
                 id="temporalUnits"
                 label={"Average Temporal Interval [a,b]"}

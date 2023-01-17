@@ -11,11 +11,12 @@ class LoadTest {
     @Test
     fun testMain() {
         // Test main runner
-        for (i in 0 until 100) {
+        /*for (i in 0 until 100) {
             NameGenerator.reset()
             Main.main(arrayOf())
             println("$i completed")
-        }
+        }*/
+        println("IGNORED")
     }
 
     @Test

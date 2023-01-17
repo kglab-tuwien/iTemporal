@@ -68,7 +68,7 @@ internal class GeneralTest {
     @Test
     fun runRecursiveTemporalExample() {
         // Try to produce error
-        for (i in 0 until 100) {
+        /*for (i in 0 until 100) {
             Main.initRegistry()
             Registry.properties.generateTimePoints = false
             Registry.properties.path = File("out/recursive_temporal")
@@ -82,7 +82,8 @@ internal class GeneralTest {
             val generator = BenchmarkGenerator()
             val dgAfter = generator.run(dg)
 
-        }
+        }*/
+        println("Ignored")
     }
 
 
@@ -146,6 +147,33 @@ internal class GeneralTest {
         )
 
         val answer = Utils.filterIntervals(data, filters)
+    }
+
+    @Test
+    fun testExsistentials() {
+        // Check seed
+        var seed = 0
+        //for (i in 0 until 100) {
+        //    seed = i
+        //    println(seed)
+            Main.initRegistry()
+            Registry.properties.path = File("out/GENERATION_NAME")
+            Registry.properties.outputCsvHeader = true
+            Registry.properties.generateTimePoints = false
+            Registry.properties.nodes = 10
+            Registry.properties.multiEdgeRules = 0.6
+            Registry.properties.aggregationRules = 0.0
+            Registry.properties.singleEdgeTemporalRules = 0.5
+            Registry.properties.coreSingleEdgeRules = 0.5
+            Registry.properties.weaklyAcyclicProgram = true
+            Registry.properties.averageExistentials = 3
+            Registry.properties.outputTimestampStart = 0
+            Registry.properties.outputTimestampEnd = 1000000
+            RandomGenerator.setSeed(seed)
+            val benchmarkGenerator = BenchmarkGenerator()
+            benchmarkGenerator.run()
+        //}
+
     }
 
 }

@@ -17,6 +17,8 @@ object MeteorGenerator:RuleGeneration {
         return "Meteor"
     }
 
+    var anonymCounter = 0
+
     override fun convert(dependencyGraph: DependencyGraph):DependencyGraph {
         val mutableDependencyGraph = dependencyGraph.toMutableDependencyGraph()
         val inEdges = mutableDependencyGraph.inEdges.values.flatten().filter { edge ->
@@ -76,19 +78,6 @@ object MeteorGenerator:RuleGeneration {
             if (mutableDependencyGraph.outEdges[tempMiddleNode].orEmpty().size != 1) {
                 continue
             }
-
-
-
-            /*
-            println(startNode)
-            println(cNode)
-            println(innerIntersection)
-            println(otherStartNode)
-            println(tempMiddleNode)
-            println(outNode)
-            println(innerIntersectionOtherInEdge)
-            println(innerIntersectionInEdge)
-            */
 
             val temporalEdge = mutableDependencyGraph.inEdges[tempMiddleNode].orEmpty()[0] as TemporalSingleEdge
 
@@ -184,7 +173,6 @@ object MeteorGenerator:RuleGeneration {
                             is TriangleUpEdge -> this.renderRule(inEdge)
                             is ClosingEdge -> this.renderRule(inEdge)
                             is ConditionalEdge -> this.renderRule(inEdge)
-                            is ExistentialEdge -> this.renderRule(inEdge)
                             is SinceMergeEdge -> this.renderRule(inEdge)
                             is UntilMergeEdge -> this.renderRule(inEdge)
                             else -> ""
@@ -217,15 +205,15 @@ object MeteorGenerator:RuleGeneration {
         if (orderNew.isEmpty()) {
             return node.name
         }
-        return node.name + "(" + (orderNew.joinToString(",") { if (it != -1) "N$it" else "_" }) + ")"
+        return node.name + "(" + (orderNew.joinToString(",") { if (it != -1) "N$it" else "NA${++anonymCounter}" }) + ")"
     }
 
     private fun renderRule(edge: SinceMergeEdge): String {
-        return "${convertNode(edge.to)} :- ${convertNode(edge.from,edge.termOrder)} Since[${(edge.t1/1000).toInt()},${(edge.t2/1000).toInt()}] ${convertNode(edge.from2,edge.termOrder2)}."
+        return "${convertNode(edge.to)} :- ${convertNode(edge.from,edge.termOrder)} Since[${(edge.t1).toInt()},${(edge.t2).toInt()}] ${convertNode(edge.from2,edge.termOrder2)}."
     }
 
     private fun renderRule(edge: UntilMergeEdge): String {
-        return "${convertNode(edge.to)} :- ${convertNode(edge.from,edge.termOrder)} Until[${(edge.t1/1000).toInt()},${(edge.t2/1000).toInt()}] ${convertNode(edge.from2,edge.termOrder2)}."
+        return "${convertNode(edge.to)} :- ${convertNode(edge.from,edge.termOrder)} Until[${(edge.t1).toInt()},${(edge.t2).toInt()}] ${convertNode(edge.from2,edge.termOrder2)}."
     }
 
     private fun renderRule(edge: LinearEdge): String {
@@ -246,19 +234,19 @@ object MeteorGenerator:RuleGeneration {
     }
 
     private fun renderRule(edge: DiamondMinusEdge): String {
-        return "${convertNode(edge.to)} :- Diamondminus[${(edge.t1/1000).toInt()},${(edge.t2/1000).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- Diamondminus[${(edge.t1).toInt()},${(edge.t2).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: DiamondPlusEdge): String {
-        return "${convertNode(edge.to)} :- Diamondplus[${(edge.t1/1000).toInt()},${(edge.t2/1000).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- Diamondplus[${(edge.t1).toInt()},${(edge.t2).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: BoxMinusEdge): String {
-        return "${convertNode(edge.to)} :- Boxminus[${(edge.t1/1000).toInt()},${(edge.t2/1000).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- Boxminus[${(edge.t1).toInt()},${(edge.t2).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: BoxPlusEdge): String {
-        return "${convertNode(edge.to)} :- Boxplus[${(edge.t1/1000).toInt()},${(edge.t2/1000).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- Boxplus[${(edge.t1).toInt()},${(edge.t2).toInt()}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: ClosingEdge): String {
@@ -270,7 +258,4 @@ object MeteorGenerator:RuleGeneration {
         throw RuntimeException("not supported");
     }
 
-    private fun renderRule(edge: ExistentialEdge): String {
-        throw RuntimeException("not supported");
-    }
 }

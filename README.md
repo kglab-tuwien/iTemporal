@@ -8,7 +8,7 @@ With the usage of a dynamic registration system of the core, the generator is de
 
 The details about the graph generator can be found in the corresponding paper published at ICDE 2022:
 
-Luigi Bellomarini, Markus Nissl, and Emanuel Sallinger, "iTemporal: An extensible Temporal Benchmark Generator", ICDE 2022, [to appear](https://...)
+[Luigi Bellomarini, Markus Nissl, and Emanuel Sallinger; iTemporal: An extensible Temporal Benchmark Generator, ICDE 2022](https://ieeexplore.ieee.org/document/9835220)
 
 ## Execution 
 

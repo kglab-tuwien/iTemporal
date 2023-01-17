@@ -21,7 +21,107 @@ object VadalogGenerator:RuleGeneration {
     }
 
     override fun convert(dependencyGraph: DependencyGraph):DependencyGraph {
-        return dependencyGraph
+        val mutableDependencyGraph = dependencyGraph.toMutableDependencyGraph()
+        val inEdges = mutableDependencyGraph.inEdges.values.flatten().filter { edge ->
+            edge is ClosingEdge
+        }
+
+        for (closingEdge in inEdges) {
+            // Check pattern (closing should only be in since operation, so we do some basic checking to ensure correct graph pattern)
+            // but ignore term order
+            val startNode = closingEdge.from
+            val cNode = closingEdge.to
+            val closingNodeOutEdges = mutableDependencyGraph.outEdges[cNode].orEmpty();
+
+            if (closingNodeOutEdges.size != 2 || !(closingNodeOutEdges[0] is IntersectionEdge) || !(closingNodeOutEdges[1] is IntersectionEdge)) {
+                continue;
+            }
+
+            val t1 = closingNodeOutEdges[0].to
+            val t2= closingNodeOutEdges[1].to
+
+            // Both t1 and t2 have two incoming intersection edges.
+            val t1Inedges = mutableDependencyGraph.inEdges[t1].orEmpty();
+            val t2Inedges = mutableDependencyGraph.inEdges[t2].orEmpty();
+
+            if (t1Inedges.size != 2 || !(t1Inedges[0] is IntersectionEdge) || !(t1Inedges[1] is IntersectionEdge)) {
+                continue;
+            }
+
+            if (t2Inedges.size != 2 || !(t2Inedges[0] is IntersectionEdge) || !(t2Inedges[1] is IntersectionEdge)) {
+                continue;
+            }
+
+            // We have to find out the node between diamondMinus and Intersection edge
+            val t1OtherInEdge = t1Inedges.filter { it.from != cNode }.first()
+            val t2OtherInEdge = t2Inedges.filter { it.from != cNode }.first()
+
+            val t1OtherInNode = t1OtherInEdge.from
+            val t2OtherInNode = t2OtherInEdge.from
+
+            val outt1 = mutableDependencyGraph.outEdges[t1].orEmpty().map { it.to }.firstOrNull()
+            val outt2 = mutableDependencyGraph.outEdges[t2].orEmpty().map { it.to }.firstOrNull()
+
+            if (outt1 != t2OtherInNode && outt2 != t1OtherInNode) {
+                continue
+            }
+
+            val tempMiddleNode = if(outt1 == t2OtherInNode) t2OtherInNode else t1OtherInNode
+            val otherStartNode = if(outt1 == t2OtherInNode) t1OtherInNode else t2OtherInNode
+            val outNode = if(outt1 == t2OtherInNode) t2 else t1
+            val innerIntersection = if(outt1 == t2OtherInNode) t1 else t2
+            val innerIntersectionOtherInEdge = if(outt1 == t2OtherInNode) t1OtherInEdge else t2OtherInEdge
+            val innerIntersectionInEdge = if(outt1 == t2OtherInNode) t1Inedges.filter { it.from == cNode }.first() else t2Inedges.filter { it.from == cNode }.first()
+
+            if (mutableDependencyGraph.inEdges[tempMiddleNode].orEmpty().size != 1) {
+                continue
+            }
+            if (mutableDependencyGraph.outEdges[tempMiddleNode].orEmpty().size != 1) {
+                continue
+            }
+
+            val temporalEdge = mutableDependencyGraph.inEdges[tempMiddleNode].orEmpty()[0] as TemporalSingleEdge
+
+            mutableDependencyGraph.nodes.remove(cNode)
+            mutableDependencyGraph.nodes.remove(innerIntersection)
+            mutableDependencyGraph.nodes.remove(otherStartNode)
+            mutableDependencyGraph.nodes.remove(tempMiddleNode)
+
+            mutableDependencyGraph.removeEdge(closingEdge)
+            mutableDependencyGraph.removeEdge(closingNodeOutEdges[1])
+            mutableDependencyGraph.removeEdge(closingNodeOutEdges[0])
+            mutableDependencyGraph.removeEdge(temporalEdge)
+            mutableDependencyGraph.removeEdge(mutableDependencyGraph.outEdges[tempMiddleNode].orEmpty()[0])
+
+            if (temporalEdge is DiamondPlusEdge) {
+                mutableDependencyGraph.addEdge(UntilMergeEdge(
+                    from2 =otherStartNode,
+                    from=startNode,
+                    to=outNode,
+                    termOrder2 = innerIntersectionOtherInEdge.termOrder,
+                    termOrder = innerIntersectionInEdge.termOrder,
+                    t1 = temporalEdge.t1,
+                    t2 = temporalEdge.t2
+                ));
+            }
+
+            if (temporalEdge is DiamondMinusEdge) {
+                mutableDependencyGraph.addEdge(SinceMergeEdge(
+                    from2 =otherStartNode,
+                    from=startNode,
+                    to=outNode,
+                    termOrder2 = innerIntersectionOtherInEdge.termOrder,
+                    termOrder = innerIntersectionInEdge.termOrder,
+                    t1 = temporalEdge.t1,
+                    t2 = temporalEdge.t2
+                ));
+            }
+
+        }
+
+
+
+        return mutableDependencyGraph
     }
 
     override fun run(dependencyGraph: DependencyGraph, storeFile:Boolean):String {
@@ -39,17 +139,20 @@ object VadalogGenerator:RuleGeneration {
         val outputContent = StringBuilder()
         val ruleContent = StringBuilder()
 
+        inputContent.appendLine("@timeGranularity(\"no_date\").")
+
         val useHeaders = if(Registry.properties.outputCsvHeader) "true" else "false"
         for(node in dependencyGraph.nodes) {
             if (node.type == NodeType.Input) {
                 inputContent.appendLine("@input(\"${node.name}\").")
-                inputContent.appendLine("@bind(\"${node.name}\", \"csv useHeaders=$useHeaders\", \"${path.absolutePath}\",\"${node.name}_date.csv\").")
+                inputContent.appendLine("@bind(\"${node.name}\", \"csv useHeaders=$useHeaders\", \"${path.absolutePath}\",\"${node.name}_numeric.csv\").")
                 for (i in 0 until node.minArity) {
                     inputContent.appendLine("@mapping(\"${node.name}\",${i},\"${i}\",\"double\").")
                 }
-                inputContent.appendLine("@mapping(\"${node.name}\",${node.minArity},\"${node.minArity}\",\"date\").")
-                inputContent.appendLine("@mapping(\"${node.name}\",${node.minArity+1},\"${node.minArity+1}\",\"date\").")
+                inputContent.appendLine("@mapping(\"${node.name}\",${node.minArity},\"${node.minArity}\",\"double\").")
+                inputContent.appendLine("@mapping(\"${node.name}\",${node.minArity+1},\"${node.minArity+1}\",\"double\").")
                 inputContent.appendLine("@timeMapping(\"${node.name}\",${node.minArity},${node.minArity+1},#T,#T).")
+                inputContent.appendLine("@temporalType(\"${node.name}\",\"double\").")
             } else if (node.type == NodeType.Output) {
                 outputContent.appendLine("@output(\"${node.name}\").")
                 //outputContent.appendLine("@bind(\"${node.name}\", \"csv useHeaders=false\", \"${path.absolutePath}\",\"${node.name}.csv\").")
@@ -86,7 +189,8 @@ object VadalogGenerator:RuleGeneration {
                         is TriangleUpEdge -> this.renderRule(inEdge)
                         is ClosingEdge -> this.renderRule(inEdge)
                         is ConditionalEdge -> this.renderRule(inEdge)
-                        is ExistentialEdge -> this.renderRule(inEdge)
+                        is SinceMergeEdge -> this.renderRule(inEdge)
+                        is UntilMergeEdge -> this.renderRule(inEdge)
                         else -> ""
                     }
                     ruleContent.appendLine(result)
@@ -119,6 +223,18 @@ object VadalogGenerator:RuleGeneration {
 
     fun renderRule(edge: Edge): String {
         throw RuntimeException("Not implemented yet")
+    }
+
+    private fun renderRule(edge: SinceMergeEdge): String {
+        return "${convertNode(edge.to)} :- ${
+            convertNode(edge.from,edge.termOrder)
+        } <S>[${edge.t1},${edge.t2}] ${convertNode(edge.from2,edge.termOrder2)}."
+    }
+
+    private fun renderRule(edge: UntilMergeEdge): String {
+        return "${convertNode(edge.to)} :- ${
+            convertNode(edge.from,edge.termOrder)
+        } <U>[${edge.t1},${edge.t2}] ${convertNode(edge.from2, edge.termOrder2)}."
     }
 
     private fun renderRule(edge: LinearEdge): String {
@@ -157,19 +273,19 @@ object VadalogGenerator:RuleGeneration {
     }
 
     private fun renderRule(edge: DiamondMinusEdge): String {
-        return "${convertNode(edge.to)} :- <->[${edge.t1/1000},${edge.t2/1000}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- <->[${edge.t1},${edge.t2}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: DiamondPlusEdge): String {
-        return "${convertNode(edge.to)} :- <+>[${edge.t1/1000},${edge.t2/1000}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- <+>[${edge.t1},${edge.t2}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: BoxMinusEdge): String {
-        return "${convertNode(edge.to)} :- [-][${edge.t1/1000},${edge.t2/1000}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- [-][${edge.t1},${edge.t2}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: BoxPlusEdge): String {
-        return "${convertNode(edge.to)} :- [+][${edge.t1/1000},${edge.t2/1000}] ${convertNode(edge.from,edge.termOrder)}."
+        return "${convertNode(edge.to)} :- [+][${edge.t1},${edge.t2}] ${convertNode(edge.from,edge.termOrder)}."
     }
 
     private fun renderRule(edge: ClosingEdge): String {
@@ -193,9 +309,5 @@ object VadalogGenerator:RuleGeneration {
         }
 
         return "${convertNode(edge.to)} :- ${convertNode(edge.from,edge.termOrder)}${conditions}."
-    }
-
-    private fun renderRule(edge: ExistentialEdge): String {
-        return "${convertNode(edge.to)} :- ${convertNode(edge.from,edge.termOrder)}."
     }
 }

@@ -107,9 +107,11 @@ object Main {
         Registry.addPropertyAssignmentBefore(InputOutputAssigner)
         Registry.addPropertyAssignmentB(IntersectionPropertyAssigner)
         Registry.addPropertyAssignmentAfter(TermOrderPropertyAssigner)
+        Registry.addPropertyAssignmentAfter(TermOrderExistentialAssigner)
 
         // Data Generation
         Registry.addDataGenerator(DataGenerator)
+        //Registry.addDataGenerator(ForwardDataGenerator())
 
         // Edges
         Registry.addEdge(GenericEdge::class)
@@ -121,7 +123,6 @@ object Main {
         Registry.addEdge(UnionEdge::class)
         Registry.addEdge(LinearEdge::class)
         Registry.addEdge(ConditionalEdge::class)
-        Registry.addEdge(ExistentialEdge::class)
 
     }
 

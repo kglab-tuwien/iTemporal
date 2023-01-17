@@ -13,6 +13,7 @@ class ClosingEdge(override var from: Node,
                   override var uniqueId: String = NameGenerator.getUniqueName(),
                   override var termOrderShuffleAllowed: Boolean = true,
                   override var termOrderReference: String? = null,
+                  override var existentialCount: Int = 0,
 ) : TemporalSingleEdge {
     override fun timeIntervalBackward(values: List<Double>): List<Double> {
         return listOf(values[to.minArity], values[to.minArity+1])

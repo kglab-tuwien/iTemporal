@@ -112,14 +112,24 @@ object DataGenerator : DataGeneration {
         nodes.forEach { node ->
             dependencyGraph.inEdges[node].orEmpty().filter { edge -> !nodes.contains(edge.from) }.forEach {
                 edge ->
-                run {
                     val data = edge.to.data
                     edge.to.data = node.oldData
                     node.oldData = emptyList()
                     edge.backwardPropagateData()
                     node.oldData = edge.to.data
                     edge.to.data = data
-                }
+                    // Extend intervals to longer intervals
+                    edge.from.data = edge.from.data.map {
+                        val leftExtension = RandomGenerator.getNextDoubleWithPrecision(
+                            Registry.properties.averageStartExtensionIntervalDuration,
+                            Registry.properties.varianceStartExtensionIntervalDuration
+                        )
+                        val rightExtension = RandomGenerator.getNextDoubleWithPrecision(
+                            Registry.properties.averageEndExtensionIntervalDuration,
+                            Registry.properties.varianceEndExtensionIntervalDuration
+                        )
+                        it.take(edge.from.minArity) + (it[edge.from.minArity] - leftExtension) + (it[edge.from.minArity+1] + rightExtension)
+                    }
             }
         }
 

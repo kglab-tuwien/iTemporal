@@ -32,7 +32,7 @@ export default function DataConfig() {
                 id="cardinalityTermDomain"
                 label={"Cardinality of Domain"}
                 min={100}
-                max={1000}
+                max={10000}
                 step={1}
                 values={[properties.cardinalityTermDomain]}
                 onChange={(values) => dispatch(setProperty({property: "cardinalityTermDomain", value: values[0]}))}
@@ -40,7 +40,7 @@ export default function DataConfig() {
             <Slider id="averageAmountOfGeneratedOutputs"
                     label={"Average Number of Seeding Output Tuples"}
                     min={10}
-                    max={1000}
+                    max={100000}
                     step={10}
                     values={[properties.averageAmountOfGeneratedOutputs]}
                     onChange={(values) => dispatch(setProperty({property: "averageAmountOfGeneratedOutputs", value: values[0]}))}
@@ -57,7 +57,7 @@ export default function DataConfig() {
             <Slider id="averageAmountOfGeneratedOutputIntervals"
                     label={"Average Number of Seeding Output Intervals"}
                     min={1}
-                    max={100}
+                    max={1000}
                     step={1}
                     values={[properties.averageAmountOfGeneratedOutputIntervals]}
                     onChange={(values) => dispatch(setProperty({property: "averageAmountOfGeneratedOutputIntervals", value: values[0]}))}
@@ -73,13 +73,13 @@ export default function DataConfig() {
 
             <Slider id="outputIntervalStartRange"
                     label={"Start Range Output Interval"}
-                    min={1577836800}
-                    max={1640995200}
-                    step={60}
-                    values={[properties.outputTimestampStart/1000, properties.outputTimestampEnd/1000]}
+                    min={0}
+                    max={1000}
+                    step={1}
+                    values={[properties.outputTimestampStart, properties.outputTimestampEnd]}
                     onChange={(values) => {
-                        dispatch(setProperty({property: "outputTimestampStart", value: values[0]*1000}))
-                        dispatch(setProperty({property: "outputTimestampEnd", value: values[1]*1000}))
+                        dispatch(setProperty({property: "outputTimestampStart", value: values[0]}))
+                        dispatch(setProperty({property: "outputTimestampEnd", value: values[1]}))
                     }
                     }
                     initValues={[1577836800, 1640995200]}

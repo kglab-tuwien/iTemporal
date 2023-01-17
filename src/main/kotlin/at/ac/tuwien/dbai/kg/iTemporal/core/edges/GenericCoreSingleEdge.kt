@@ -11,6 +11,7 @@ class GenericCoreSingleEdge(override var from: Node,
                             override var uniqueId: String = NameGenerator.getUniqueName(),
                             override var termOrderShuffleAllowed: Boolean = true,
                             override var termOrderReference: String? = null,
+                            override var existentialCount: Int = 0,
 ) :CoreSingleEdge {
     override fun backwardPropagateData() {
         throw RuntimeException("Backward Propagation not allowed for this edge type")
@@ -48,6 +49,10 @@ class GenericCoreSingleEdge(override var from: Node,
         result = 31 * result + isCyclic.hashCode()
         result = 31 * result + termOrder.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return "GenericCoreSingleEdge(from=$from, to=$to)"
     }
 
 

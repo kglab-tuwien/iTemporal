@@ -42,7 +42,7 @@ export default function GraphGeneratorConfig() {
                 id="innerNodes"
                 label={"Number of InnerNodes"}
                 min={0}
-                max={10}
+                max={20}
                 step={1}
                 values={[innerNodes]}
                 onChange={(value) => updateNodeProperties({inputNodes:properties.inputNodes, outputNodes:properties.outputNodes, innerNodes:value[0]})}

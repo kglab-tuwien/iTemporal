@@ -1,14 +1,14 @@
 package at.ac.tuwien.dbai.kg.iTemporal.util
 
-object NameGenerator {
-    private var id = 0
+import at.ac.tuwien.dbai.kg.iTemporal.core.Registry
 
+object NameGenerator {
     fun getUniqueName():String {
-        return "g" + (++id)
+        return "g" + (++Registry.properties.lastNameID)
     }
 
     fun reset() {
-        id = 0
+        Registry.properties.lastNameID = 0
     }
 
 

@@ -1,5 +1,6 @@
 package at.ac.tuwien.dbai.kg.iTemporal.temporal.assignments
 
+import at.ac.tuwien.dbai.kg.iTemporal.core.Registry
 import at.ac.tuwien.dbai.kg.iTemporal.core.contracts.OtherPropertyAssignment
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.DependencyGraph
 import at.ac.tuwien.dbai.kg.iTemporal.core.dependencyGraph.Node
@@ -182,20 +183,25 @@ object MetaIntervalAssigner : OtherPropertyAssignment {
             IntervalInformation(IntervalDuration(0.0))
         }
 
-        println("Meta Interval assigner started")
+        if (Registry.debug) {
+            println("Meta Interval assigner started")
+        }
 
         for (node in inputNodes) {
             for (edge in dependencyGraph.outEdges[node].orEmpty())
             forwardPropagate(edge.to, dependencyGraph, mutableSetOf())
         }
 
-        println("Meta Interval assigner completed")
-
+        if (Registry.debug) {
+            println("Meta Interval assigner completed")
+        }
         /*for (node in dependencyGraph.nodes) {
             forwardPropagate(node, dependencyGraph, mutableSetOf())
         }*/
 
-        println(intervalInformations)
+        if (Registry.debug) {
+            println(intervalInformations)
+        }
 
         return dependencyGraph
 

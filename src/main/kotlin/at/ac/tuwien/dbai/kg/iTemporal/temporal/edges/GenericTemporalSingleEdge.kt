@@ -13,6 +13,7 @@ class GenericTemporalSingleEdge(override var from: Node,
                                 override var uniqueId: String = NameGenerator.getUniqueName(),
                                 override var termOrderShuffleAllowed: Boolean = true,
                                 override var termOrderReference: String? = null,
+                                override var existentialCount: Int = 0,
 ) : TemporalSingleEdge {
     override fun timeIntervalBackward(values: List<Double>): List<Double> {
         throw RuntimeException("Invalid temporal edge for applying timeIntervalBackward")
@@ -60,6 +61,10 @@ class GenericTemporalSingleEdge(override var from: Node,
         result = 31 * result + t1.hashCode()
         result = 31 * result + t2.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return "GenericTemporalSingleEdge(from=$from, to=$to)"
     }
 
 

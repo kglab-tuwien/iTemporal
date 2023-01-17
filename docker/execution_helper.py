@@ -20,7 +20,7 @@ data["step"] = "ALL"
 data["dependencyGraph"] = json.dumps(data["graphInternal"])
 del data["graphInternal"]
 
-r = requests.post('http://localhost:8085/rules',json=data)
+r = requests.post('http://localhost:8081/rules',json=data)
 ruleResponse = r.json()
 
 #print(data)
@@ -37,7 +37,7 @@ datasizes = args.datasizes.split(",")
 
 for size in datasizes:
     data["properties"]["averageAmountOfGeneratedOutputs"] = size
-    r = requests.post('http://localhost:8085/data',json=data)
+    r = requests.post('http://localhost:8081/data',json=data)
     dataResponse = r.json()
     for (key,value) in dataResponse["data"].items():
         with open(args.out + "/data_"+key+"_"+str(size)+".csv", "w") as f:

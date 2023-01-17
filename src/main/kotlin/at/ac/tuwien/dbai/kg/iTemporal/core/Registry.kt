@@ -138,7 +138,9 @@ object Registry {
     fun clean() {
         graphGenerator = null
         graphNormalizations.clear()
+        categoryAssignmentsSingleEdge.forEach {it.ruleAssignments.clear()}
         categoryAssignmentsSingleEdge.clear()
+        categoryAssignmentsMultiEdge.forEach {it.ruleAssignments.clear()}
         categoryAssignmentsMultiEdge.clear()
         ruleDecompositions.clear()
         propertyAssignmentsBefore.clear()

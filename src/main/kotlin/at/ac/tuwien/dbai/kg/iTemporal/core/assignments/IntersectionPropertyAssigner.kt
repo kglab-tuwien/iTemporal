@@ -118,7 +118,7 @@ object IntersectionPropertyAssigner : ArityPropertyAssignment {
 
 
 
-        // optional select higher arity, we follow minimum arity pirinicple
+        // optional select higher arity, we follow minimum arity principle
         val nodeArity = intersectionNode.minArity
         intersectionNode.maxArity = nodeArity
 
@@ -150,24 +150,41 @@ object IntersectionPropertyAssigner : ArityPropertyAssignment {
          * Example3: NodeArity: 6, maxArity: 7,4, then minMaxArity=4,maxMaxArity=7, diff1=0 and maxNumberJoinTerms=4
          */
 
-        // The maximum number of terms is given by
         val numberNoJoinTerms = nodeArity - numberJoinTerms
+        // The maximum number of terms is given by
         val maxE1 = min(numberNoJoinTerms, source1.maxArity - numberJoinTerms)
         val maxE2 = min(numberNoJoinTerms, source2.maxArity - numberJoinTerms)
-        val minE1 = max(0,min(numberNoJoinTerms, source1.minArity - numberJoinTerms))
-        val minE2 = max(0,min(numberNoJoinTerms,source2.minArity - numberJoinTerms))
+        assert(maxE1 + maxE2 >= numberNoJoinTerms)
+        // The minimum number of terms is given by
+        val minE1 = max(0,numberNoJoinTerms- maxE2)
+        val minE2 = max(0,numberNoJoinTerms- maxE1)
+        assert(minE1 <= maxE1)
+        assert(minE2 <= maxE2)
+        //val minE1 = max(0,min(numberNoJoinTerms, source1.minArity - numberJoinTerms))
+        //val minE2 = max(0,min(numberNoJoinTerms,source2.minArity - numberJoinTerms))
+
+        //println("Numer of join Terms $numberJoinTerms")
+        //println("Numer of no join Terms $numberNoJoinTerms")
+        //println("maxE1 $maxE1")
+        //println("maxE2 $maxE2")
+        //println("minE1 $minE1")
+        //println("minE2 $minE2")
 
         // The minimum number depends on:
         // (i) the minimum between the minimumArity of the node and the numberNoJoinTerms
         // (ii) we have to add at least numberNoJoinTerms - the maximum number of terms that can be added by the other node
-        val minCriteria = max(minE1, numberNoJoinTerms - maxE2)
+        val minCriteria = minE1 //max(minE1, numberNoJoinTerms - maxE2)
 
         // The maximum number depends on:
         // (i) the maximumArity of the node
         // (ii) the minimum number of terms that must be added by the other node (reduces maximum numberNoJoinTerms)
-        val maxCriteria = min(maxE1, numberNoJoinTerms - minE2)
+        // (ii) this is not valid, there is no minimum number of non join nodes that have to be added
+        val maxCriteria = maxE1 //min(maxE1, numberNoJoinTerms - minE2)
 
-        assert(minCriteria <= maxCriteria)
+        //<assert(minCriteria <= maxCriteria)
+        //println("minCriteria $minCriteria")
+        //println("maxCriteria $maxCriteria")
+
 
         val noJT1 = max(minCriteria, RandomGenerator.sharedRandom.nextInt(maxCriteria + 1))
         val noJT2 = numberNoJoinTerms - noJT1

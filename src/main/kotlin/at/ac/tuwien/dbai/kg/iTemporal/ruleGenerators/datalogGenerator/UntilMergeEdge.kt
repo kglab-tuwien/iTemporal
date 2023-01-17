@@ -14,7 +14,8 @@ class UntilMergeEdge(
     override var uniqueId: String = "no uniquenes required",
     override var isCyclic: Boolean = false,
     override var termOrderShuffleAllowed: Boolean = false,
-    override var termOrderReference: String? = null
+    override var termOrderReference: String? = null,
+    override var existentialCount: Int = 0,
 ) : Edge {
     override fun backwardPropagateData() {
         throw NotImplementedError()

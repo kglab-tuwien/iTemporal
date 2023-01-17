@@ -77,7 +77,7 @@ class BenchmarkGenerator() {
         }
 
         // Now we calculate the SCC
-        DependencyGraphHelper.calculateSCC(dependencyGraph, true)
+        DependencyGraphHelper.calculateSCC(dg, true)
 
         if (step >= Step.PROPERTY_ARITY) {
             dg = ArityAssigner.run(dg)

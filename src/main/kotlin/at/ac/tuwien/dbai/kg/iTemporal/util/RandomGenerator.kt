@@ -74,11 +74,10 @@ object RandomGenerator {
             val intervalAmount = max(0,(sharedRandomJava.nextGaussian() * sqrt(minimumOutputVarianceIntervals) + minimumOutputMeanIntervals).roundToInt())
 
             for (j in 0 until intervalAmount) {
-                // Add time intervals (rounded to second ... divided by 1000 to get seconds rounded and then multiplied again to get milliseconds)
                 val intervalStart = sharedRandom.nextLong(
                     Registry.properties.outputTimestampStart,
                     Registry.properties.outputTimestampEnd
-                ) / 1000 * 1000
+                )
                 val minimalIntervalSize =
                     max(0.0, MetaIntervalAssigner.getIntervalInformations()[node]!!.intervalOffset.getDuration())
                 val intervalEnd: Double = if (Registry.properties.generateTimePoints) {

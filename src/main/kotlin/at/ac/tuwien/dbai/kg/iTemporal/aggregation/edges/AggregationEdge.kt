@@ -45,6 +45,7 @@ interface AggregationEdge:SingleEdge {
             } else {
                 this.termOrder = data
             }
+            this.termOrder = this.termOrder.map { if (it < this.to.minArity-1 || it >= this.to.minArity && it <= this.to.minArity + this.numberOfContributors) it else -1 }
         }
     }
 }

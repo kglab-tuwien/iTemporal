@@ -188,8 +188,8 @@ const initState = {
         varianceAmountOfGeneratedOutputs: 3.0,
         averageAmountOfGeneratedOutputIntervals: 1,
         varianceAmountOfGeneratedOutputIntervals: 0.0,
-        outputTimestampStart: (new Date("2020-01-01")).getTime(),
-        outputTimestampEnd: (new Date("2022-01-01")).getTime(),
+        outputTimestampStart: 0, //(new Date("2020-01-01")).getTime(),
+        outputTimestampEnd: 1000, //(new Date("2022-01-01")).getTime(),
         averageOutputIntervalDuration: 10.0,
         varianceOutputIntervalDuration: 1.0,
         averageAggregationSelectivity: 0.2,
@@ -218,7 +218,6 @@ export const generateGraphAsync = createAsyncThunk(
     async (arg, {getState}) => {
         const state = getState();
         const response = await runGenerateGraph(state.properties);
-        console.log(response, "H")
         return response.data;
     }
 );
@@ -381,8 +380,9 @@ const graphSlice = createSlice({
             })
             .addCase(generateGraphAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                state.properties = action.payload.properties;
                 const oldGraph = JSON.stringify(state.graphInternal)
-                state.graphInternal = enrichGraph(action.payload);
+                state.graphInternal = enrichGraph(JSON.parse(action.payload.graph));
                 const newGraph = JSON.stringify(state.graphInternal)
                 if (oldGraph !== newGraph) {
                     state.generatedRules = {}
@@ -394,8 +394,9 @@ const graphSlice = createSlice({
             })
             .addCase(generateRuleTypesAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                state.properties = action.payload.properties;
                 const oldGraph = JSON.stringify(state.graphInternal)
-                state.graphInternal = enrichGraph(action.payload);
+                state.graphInternal = enrichGraph(JSON.parse(action.payload.graph));
                 const newGraph = JSON.stringify(state.graphInternal)
                 if (oldGraph !== newGraph) {
                     state.generatedRules = {}
@@ -407,8 +408,9 @@ const graphSlice = createSlice({
             })
             .addCase(generatePropertiesAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                state.properties = action.payload.properties;
                 const oldGraph = JSON.stringify(state.graphInternal)
-                state.graphInternal = enrichGraph(action.payload);
+                state.graphInternal = enrichGraph(JSON.parse(action.payload.graph));
                 const newGraph = JSON.stringify(state.graphInternal)
                 if (oldGraph !== newGraph) {
                     state.generatedRules = {}
@@ -420,6 +422,7 @@ const graphSlice = createSlice({
             })
             .addCase(generateRulesAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                state.properties = action.payload.properties;
                 const oldGraph = JSON.stringify(state.graphInternal)
                 state.graphInternal = enrichGraph(JSON.parse(action.payload.graph));
                 const newGraph = JSON.stringify(state.graphInternal)
@@ -434,6 +437,7 @@ const graphSlice = createSlice({
             })
             .addCase(generateDataAsync.fulfilled, (state, action) => {
                 state.status = 'idle';
+                state.properties = action.payload.properties;
                 const oldGraph = JSON.stringify(state.graphInternal)
                 state.graphInternal = enrichGraph(JSON.parse(action.payload.graph));
                 const newGraph = JSON.stringify(state.graphInternal)

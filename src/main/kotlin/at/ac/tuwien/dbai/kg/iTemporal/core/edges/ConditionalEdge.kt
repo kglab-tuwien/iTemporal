@@ -100,6 +100,7 @@ class ConditionalEdge(override var from: Node,
                       var conditions: Set<Condition> = setOf(),
                       override var termOrderShuffleAllowed: Boolean = true,
                       override var termOrderReference: String? = null,
+                      override var existentialCount: Int = 0,
 ) :CoreSingleEdge {
 
 

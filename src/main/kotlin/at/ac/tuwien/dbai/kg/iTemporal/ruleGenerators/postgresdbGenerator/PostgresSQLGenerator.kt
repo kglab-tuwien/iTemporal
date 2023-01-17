@@ -135,7 +135,6 @@ object PostgresSQLGenerator: RuleGeneration {
                             is ClosingEdge -> this.renderRule(inEdge)
                             is TriangleUpEdge -> this.renderRule(inEdge)
                             is ConditionalEdge -> this.renderRule(inEdge)
-                            is ExistentialEdge -> this.renderRule(inEdge)
                             is ITAEdge -> this.renderRule(inEdge)
                             else -> ""
                         }
@@ -200,19 +199,19 @@ object PostgresSQLGenerator: RuleGeneration {
     }
 
     private fun renderRule(edge: DiamondMinusEdge): String {
-        return "${edge.to.name} AS (SELECT ${getVariableOrder(edge.from.name, edge.termOrder)} startdate + interval '${edge.t1/1000} seconds' as startdate, enddate + interval '${edge.t2/1000} seconds' as enddate FROM ${edge.from.name}), "
+        return "${edge.to.name} AS (SELECT ${getVariableOrder(edge.from.name, edge.termOrder)} startdate + interval '${edge.t1} seconds' as startdate, enddate + interval '${edge.t2} seconds' as enddate FROM ${edge.from.name}), "
     }
 
     private fun renderRule(edge: DiamondPlusEdge): String {
-        return "${edge.to.name} AS (SELECT ${getVariableOrder(edge.from.name, edge.termOrder)} startdate - interval '${edge.t2/1000} seconds' as startdate, enddate - interval '${edge.t1/1000} seconds' as enddate FROM ${edge.from.name}), "
+        return "${edge.to.name} AS (SELECT ${getVariableOrder(edge.from.name, edge.termOrder)} startdate - interval '${edge.t2} seconds' as startdate, enddate - interval '${edge.t1} seconds' as enddate FROM ${edge.from.name}), "
     }
 
     private fun renderRule(edge: BoxMinusEdge): String {
-        return createMergeRules(edge.from.name, edge.to.name, edge.termOrder.size)+"${edge.to.name} AS (SELECT ${getVariableOrder(edge.to.name+"_merged", edge.termOrder)} startdate + interval '${edge.t2/1000} seconds' as startdate, enddate + interval '${edge.t1/1000} seconds' as enddate FROM ${edge.to.name}_merged WHERE startdate + interval '${edge.t2/1000} seconds' < enddate + interval '${edge.t1/1000} seconds') , "
+        return createMergeRules(edge.from.name, edge.to.name, edge.termOrder.size)+"${edge.to.name} AS (SELECT ${getVariableOrder(edge.to.name+"_merged", edge.termOrder)} startdate + interval '${edge.t2} seconds' as startdate, enddate + interval '${edge.t1} seconds' as enddate FROM ${edge.to.name}_merged WHERE startdate + interval '${edge.t2} seconds' < enddate + interval '${edge.t1} seconds') , "
     }
 
     private fun renderRule(edge: BoxPlusEdge): String {
-        return createMergeRules(edge.from.name, edge.to.name, edge.termOrder.size)+"${edge.to.name} AS (SELECT ${getVariableOrder(edge.to.name+"_merged", edge.termOrder)} startdate - interval '${edge.t1/1000} seconds' as startdate, enddate - interval '${edge.t2/1000} seconds' as enddate FROM ${edge.to.name}_merged WHERE startdate - interval '${edge.t1/1000} seconds' < enddate - interval '${edge.t2/1000} seconds'), "
+        return createMergeRules(edge.from.name, edge.to.name, edge.termOrder.size)+"${edge.to.name} AS (SELECT ${getVariableOrder(edge.to.name+"_merged", edge.termOrder)} startdate - interval '${edge.t1} seconds' as startdate, enddate - interval '${edge.t2} seconds' as enddate FROM ${edge.to.name}_merged WHERE startdate - interval '${edge.t1} seconds' < enddate - interval '${edge.t2} seconds'), "
     }
 
     private fun renderRule(edge: ClosingEdge): String {
@@ -249,11 +248,6 @@ object PostgresSQLGenerator: RuleGeneration {
 
         return "${edge.to.name} AS (SELECT ${getVariableOrder(edge.from.name, edge.termOrder)} startdate, enddate FROM ${edge.from.name} $conditions), "
     }
-
-    private fun renderRule(edge: ExistentialEdge): String {
-        throw java.lang.RuntimeException("invalid rule type")
-    }
-
 
     private fun renderRule(edge: ITAEdge): String {
         val itaBuilder = StringBuilder()

@@ -11,6 +11,7 @@ class GenericEdge(override var from: Node,
                   override var uniqueId: String = NameGenerator.getUniqueName(),
                   override var termOrderShuffleAllowed: Boolean = true,
                   override var termOrderReference: String? = null,
+                  override var existentialCount: Int = 0,
 ) :Edge {
     override fun backwardPropagateData() {
         throw RuntimeException("Backward Propagation not allowed for this edge type")
